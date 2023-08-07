@@ -4,6 +4,7 @@ import pytesseract
 import pyautogui
 import random
 import time
+import re
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
@@ -33,7 +34,7 @@ def start_scan(window_size, x=1295, y=760):
 
             # scan item attributes
             item_data = scan_item_attr(window_size, col, x)
-            item_data = item_data.replace("\n", " ")
+            item_data = clean_data(item_data)
             print(item_data)
             if "Critical Strike Chance" in item_data:
                 print("x" * 10)
@@ -76,3 +77,15 @@ def scan_item_attr(window_size, col, x):
     extracted_text = pytesseract.image_to_string(window_content)
 
     return extracted_text
+
+def clean_data(input_data):
+    # Use regex to find all non-letter, non-number, and non-space characters
+    non_letter_number_space_pattern = r'[^a-zA-Z0-9./+-:\[\]%() ]+'
+    # Replace all non-letter, non-number, and non-space characters with a space
+    cleaned_string = re.sub(non_letter_number_space_pattern, ' ', input_data)
+    
+    # Use regex to replace multiple consecutive spaces and newlines with a single space
+    # The regex pattern '[\s\n]+' matches one or more consecutive whitespace characters (including spaces and newlines)
+    cleaned_string = re.sub(r'[\s\n]+', ' ', cleaned_string)
+    
+    return cleaned_string

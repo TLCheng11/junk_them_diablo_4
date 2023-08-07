@@ -1,4 +1,5 @@
 import pyautogui
+import time
 
 from items_scaner import start_scan
 
