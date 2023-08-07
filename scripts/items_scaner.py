@@ -1,5 +1,7 @@
 from PIL import ImageGrab
+import numpy as np
 import pygetwindow as gw
+import cv2
 import pytesseract
 import pyautogui
 import random
@@ -22,39 +24,38 @@ def start_scan(window_size, x=1295, y=760):
 	time.sleep(0.2)
 
 	# loop through each inventory slot
-	for row in range(3):
+	for row in range(2):
 		for col in range(11):
 			# create a random time lag to create different between each loop action
 			time_lag = random.randint(0, 9) / 100
 
-			# sometime the game cannot dedect mouse movement
+			# sometime the game cannot dedect mouse movement by pyautogui
 			# need to pick up each item to make sure tooltip will showup
 			pyautogui.leftClick()
-			time.sleep(0.3 + time_lag)
+			time.sleep(0.01 + time_lag)
 			pyautogui.leftClick()
-			time.sleep(0.2 + time_lag)
+			time.sleep(0.01 + time_lag)
 
 			# scan item attributes
 			item_data = scan_item_attr(window_size, col, x)
 			item_data = clean_data(item_data)
-			time.sleep(0.2 + time_lag)
+			time.sleep(0.01 + time_lag)
 
 			if not check_criteria(CRITERIAS, item_data):
 				# mark item as junk
 				pyautogui.press("space")
-				time.sleep(0.2 + time_lag)
 
 			# move mouse horizontally until it reach last slot on the row
 			if col < 10:
-				pyautogui.moveRel(inventory_slot_width, 0, 0.2 + time_lag)
-				time.sleep(0.2)
+				pyautogui.moveRel(inventory_slot_width, 0, 0.1 + time_lag)
+				time.sleep(0.01)
 				x += inventory_slot_width
 
 		# move mouse to first item on next row
 		x -= inventory_slot_width * 10
 		y += inventory_slot_height
 		pyautogui.moveTo(x, y, 0.5)
-		time.sleep(0.2)
+		time.sleep(0.01)
 
 
 def scan_item_attr(window_size, col, x):
@@ -73,7 +74,14 @@ def scan_item_attr(window_size, col, x):
 
 	# scan tooltips
 	window_content = ImageGrab.grab(bbox=(left, top, right, bottom))
-	extracted_text = pytesseract.image_to_string(window_content)
+
+	# Convert the Pillow Image to a NumPy array
+	numpy_array = np.array(window_content)
+
+	# Convert the image to grayscale
+	gray_image = cv2.cvtColor(numpy_array, cv2.COLOR_BGR2GRAY)
+
+	extracted_text = pytesseract.image_to_string(gray_image)
 
 	return extracted_text
 
@@ -90,6 +98,11 @@ def clean_data(input_data):
 	return cleaned_string
 
 def check_criteria(criteria, item_data, player_class="Rogue", match_needed=3):
+	print(item_data)
+	print("===" * 10)
+	# if already marked as junk, skip
+	if check_marked_as_junk(item_data):
+		return True
 
 	# if it is legendary or unique, skip
 	if "Legendary" in item_data or "Unique" in item_data:
@@ -105,7 +118,7 @@ def check_criteria(criteria, item_data, player_class="Rogue", match_needed=3):
 			tier_needed = False
 			for tier in criteria["Item_teir_to_keep"]:
 				if tier in item_data:
-					tier = True
+					tier_needed = True
 					break
 
 			if not tier_needed:
@@ -122,3 +135,7 @@ def check_criteria(criteria, item_data, player_class="Rogue", match_needed=3):
 	
 	# if it is not a gear, skip
 	return True
+
+def check_marked_as_junk(item_data):
+    pattern = re.compile(r'un\s*mark\s*as', re.IGNORECASE)
+    return bool(pattern.search(item_data))
