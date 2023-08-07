@@ -12,7 +12,7 @@ from criterias import CRITERIAS
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-def start_scan(window_size, x=1295, y=760):
+def start_scan(window_size, inventory_slot_to_check, x=1295, y=760):
 	# convert start position and inventory dimension with game window resolution
 	x = 1920 * x / window_size.width
 	y = 1080 * y / window_size.height
@@ -24,26 +24,28 @@ def start_scan(window_size, x=1295, y=760):
 	time.sleep(0.2)
 
 	# loop through each inventory slot
-	for row in range(2):
+	for row in range(3):
 		for col in range(11):
-			# create a random time lag to create different between each loop action
-			time_lag = random.randint(0, 9) / 100
+			if inventory_slot_to_check[row][col]:
+				# create a random time lag to create different between each loop action
+				time_lag = random.randint(0, 9) / 100
 
-			# sometime the game cannot dedect mouse movement by pyautogui
-			# need to pick up each item to make sure tooltip will showup
-			pyautogui.leftClick()
-			time.sleep(0.01 + time_lag)
-			pyautogui.leftClick()
-			time.sleep(0.01 + time_lag)
+				# sometime the game cannot dedect mouse movement by pyautogui
+				# need to pick up each item to make sure tooltip will showup
+				pyautogui.leftClick()
+				time.sleep(0.01 + time_lag)
+				pyautogui.leftClick()
+				time.sleep(0.01 + time_lag)
 
-			# scan item attributes
-			item_data = scan_item_attr(window_size, col, x)
-			item_data = clean_data(item_data)
-			time.sleep(0.01 + time_lag)
+				# scan item attributes
+				item_data = scan_item_attr(window_size, col, x)
+				item_data = clean_data(item_data)
+				time.sleep(0.01 + time_lag)
 
-			if not check_criteria(CRITERIAS, item_data):
-				# mark item as junk
-				pyautogui.press("space")
+				if not check_criteria(CRITERIAS, item_data):
+					# mark item as junk
+					time.sleep(0.01 + time_lag)
+					pyautogui.press("space")
 
 			# move mouse horizontally until it reach last slot on the row
 			if col < 10:
