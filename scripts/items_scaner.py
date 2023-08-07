@@ -60,11 +60,11 @@ def start_scan(window_size, x=1295, y=760):
 
 def scan_item_attr(window_size, col, x):
 	# init window size and tooltip size and direction
-	left_tooltip_start = 430 * 1920 // window_size.width * -1
-	right_tooltip_start = 40 * 1920 // window_size.width
+	left_tooltip_start = 425 * 1920 // window_size.width * -1
+	right_tooltip_start = 45 * 1920 // window_size.width
 
 	tooltip_offset = right_tooltip_start if 2 <= col <= 3 else left_tooltip_start
-	tooltop_width = 390 * 1920 // window_size.width
+	tooltop_width = 385 * 1920 // window_size.width
 
 	# define tooltip area
 	top = 0

@@ -15,7 +15,7 @@ CRITERIAS = {
             "Ranks of Shadow Imbuement": 0,
         },
         "Chest": {
-			"needed_to_match": 3,
+			"needed_to_match": 2,
 			"Damage Reduction": 0,
 			"Damage Reduction from Close Enemies": 0,
 			"Damage Reduction from Distant Enemies": 0,
@@ -25,7 +25,7 @@ CRITERIAS = {
 			"Damage Reduction from Enemies That Are Poisoned": 0,
         },
         "Gloves": {
-			"needed_to_match": 3,
+			"needed_to_match": 2,
             "Attack Speed": 0,
             "Critical Strike Chance": 0,
             "Lucky Hit Chance": 0,
