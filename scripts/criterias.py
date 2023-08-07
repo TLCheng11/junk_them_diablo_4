@@ -1,4 +1,7 @@
 CRITERIAS = {
+	"Item_teir_to_keep": [
+		"Ancestral"
+	],
     "Rogue": {
         "Helm": {
 			"needed_to_match": 3,

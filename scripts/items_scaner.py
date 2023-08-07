@@ -90,16 +90,27 @@ def clean_data(input_data):
 	return cleaned_string
 
 def check_criteria(criteria, item_data, player_class="Rogue", match_needed=3):
-	class_criteria = criteria[player_class]
 
 	# if it is legendary or unique, skip
 	if "Legendary" in item_data or "Unique" in item_data:
 		return True
 
+	class_criteria = criteria[player_class]
+
 	# find out the gear type
 	for gear_type in class_criteria:
 		if gear_type in item_data:
 			
+			#check item tier:
+			tier_needed = False
+			for tier in criteria["Item_teir_to_keep"]:
+				if tier in item_data:
+					tier = True
+					break
+
+			if not tier_needed:
+				return False
+
 			for attr in class_criteria[gear_type]:
 				if attr in item_data:
 					match_needed -= 1
