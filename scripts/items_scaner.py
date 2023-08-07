@@ -97,9 +97,7 @@ def clean_data(input_data):
 	
 	return cleaned_string
 
-def check_criteria(criteria, item_data, player_class="Rogue", match_needed=3):
-	print(item_data)
-	print("===" * 10)
+def check_criteria(criteria, item_data, player_class="Rogue"):
 	# if already marked as junk, skip
 	if check_marked_as_junk(item_data):
 		return True
@@ -124,6 +122,8 @@ def check_criteria(criteria, item_data, player_class="Rogue", match_needed=3):
 			if not tier_needed:
 				return False
 
+			# start comparing
+			match_needed = class_criteria[gear_type]["match_needed"]
 			for attr in class_criteria[gear_type]:
 				if attr in item_data:
 					match_needed -= 1

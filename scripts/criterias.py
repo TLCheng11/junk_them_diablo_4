@@ -4,7 +4,7 @@ CRITERIAS = {
 	],
     "Rogue": {
         "Helm": {
-			"needed_to_match": 3,
+			"match_needed": 3,
             "Basic Skill Attack Speed": 0,
             "Cooldown Reduction": 0,
             "Life On Kill": 0,
@@ -15,7 +15,7 @@ CRITERIAS = {
             "Ranks of Shadow Imbuement": 0,
         },
         "Chest": {
-			"needed_to_match": 2,
+			"match_needed": 2,
 			"Damage Reduction": 0,
 			"Damage Reduction from Close Enemies": 0,
 			"Damage Reduction from Distant Enemies": 0,
@@ -25,7 +25,7 @@ CRITERIAS = {
 			"Damage Reduction from Enemies That Are Poisoned": 0,
         },
         "Gloves": {
-			"needed_to_match": 2,
+			"match_needed": 2,
             "Attack Speed": 0,
             "Critical Strike Chance": 0,
             "Lucky Hit Chance": 0,
@@ -36,7 +36,7 @@ CRITERIAS = {
             "Ranks of Twisting Blades": 0,
         },
 		"Pants": {
-			"needed_to_match": 3,
+			"match_needed": 3,
 			"Damage Reduction": 0,
 			"Damage Reduction while Injured": 0,
 			"Damage Reduction from Close Enemies": 0,
@@ -46,14 +46,14 @@ CRITERIAS = {
 			"Damage Reduction from Enemies that are Poisoned": 0,
 		},
 		"Boots": {
-			"needed_to_match": 3,
+			"match_needed": 3,
 			"Dexterity": 0,
 			"Damage Reduction while Injured": 0,
 			"Movement Speed": 0,
 			"Energy Cost Reduction": 0,
 		},
         "Amulet": {
-			"needed_to_match": 3,
+			"match_needed": 3,
             "Cooldown Reduction": 0,
 			"Damage Reduction": 0,
 			"Damage Reduction while Injured": 0,
@@ -68,7 +68,7 @@ CRITERIAS = {
 			"Ranks of the Weapon Mastery Passive": 0,
         },
 		"Ring": {
-			"needed_to_match": 3,
+			"match_needed": 3,
 			"Critical Strike Chance": 0,
 			"Critical Strike Damage": 0,
 			"Lucky Hit Chance": 0,
@@ -77,7 +77,7 @@ CRITERIAS = {
 			"Critical Strike Damage with Imbued Skills": 0,
 		},
 		"Damage Per Second": {
-			"needed_to_match": 3,
+			"match_needed": 3,
 			"Dexterity": 0,
 			"All Stats": 0,
 			"Core Skill Damage": 0,
@@ -86,7 +86,7 @@ CRITERIAS = {
 			"Vulnerable Damage": 0,
 		},
 		"Shield": {
-			"needed_to_match": 3,
+			"match_needed": 3,
 			"None": 0
 		}
     }
