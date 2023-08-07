@@ -1,6 +1,8 @@
 CRITERIAS = {
 	"Item_teir_to_keep": [
-		"Ancestral"
+		# "Normal",
+		# "Sacred",
+		"Ancestral",
 	],
     "Rogue": {
         "Helm": {

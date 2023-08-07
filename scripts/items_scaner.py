@@ -115,7 +115,7 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 			#check item tier:
 			tier_needed = False
 			for tier in criteria["Item_teir_to_keep"]:
-				if tier in item_data:
+				if tier in item_data or tier == "Normal":
 					tier_needed = True
 					break
 
