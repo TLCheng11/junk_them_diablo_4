@@ -32,11 +32,12 @@ def start_scan(window_size, x=1295, y=760):
             time.sleep(0.2 + time_lag)
 
             # scan item attributes
-            # item_data = scan_item_attr(window_size, col, x)
-            # item_data.replace("\n", " ")
-            # if "Critial Strike Chance" in item_data:
-            #     print(item_data)
-            #     print("=" * 30)
+            item_data = scan_item_attr(window_size, col, x)
+            item_data = item_data.replace("\n", " ")
+            print(item_data)
+            if "Critical Strike Chance" in item_data:
+                print("x" * 10)
+            print("=" * 30)
             time.sleep(0.2 + time_lag)
 
             # mark item as junk (testing feature)
