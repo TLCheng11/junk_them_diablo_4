@@ -108,6 +108,10 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 	if "Legendary" in item_data or "Unique" in item_data:
 		return True
 
+	# if item is upgraded, skip
+	if "Upgrades" in item_data:
+		return True
+
 	class_criteria = criteria[player_class]
 
 	# find out the gear type
