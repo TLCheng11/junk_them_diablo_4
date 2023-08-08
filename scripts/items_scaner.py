@@ -129,10 +129,14 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 				return False
 
 			# start comparing
+			print(item_data)
 			match_needed = class_criteria[gear_type]["match_needed"]
 			for attr in class_criteria[gear_type]["attributes_needed"]:
-				if attr in item_data:
+				pattern = re.compile(rf'{attr}(?! from| while| as| with)')
+				if bool(pattern.search(item_data)):
+					print(attr, match_needed)
 					match_needed -= 1
+					print(attr, match_needed)
 				if match_needed == 0:
 					return True
 			

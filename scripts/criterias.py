@@ -19,7 +19,7 @@ CRITERIAS = {
 			},
         },
         "Chest": {
-			"match_needed": 2,
+			"match_needed": 3,
 			"attributes_needed": {
 				"Damage Reduction": 0,
 				"Damage Reduction from Close Enemies": 0,
@@ -44,14 +44,14 @@ CRITERIAS = {
 			},
         },
 		"Pants": {
-			"match_needed": 3,
+			"match_needed": 4,
 			"attributes_needed": {
-				"Damage Reduction": 0,
+				# "Damage Reduction": 0,
 				"Damage Reduction while Injured": 0,
 				"Damage Reduction from Close Enemies": 0,
 				"Damage Reduction from Distant Enemies": 0,
 				"Maximum Life": 0,
-				"Total Armor": 0,
+				# "Total Armor": 0,
 				"Damage Reduction from Enemies that are Poisoned": 0,
 			},
 		},
