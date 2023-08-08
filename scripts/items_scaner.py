@@ -129,9 +129,11 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 	if not tier_needed:
 		return False
 
-	# start comparing
+	# further trim the data to avoid weapon inherited attr
+	trimmed_item_data = item_data[cutoff_index:]
 	match_needed = class_criteria[gear_type]["match_needed"]
-	trimmed_item_data = item_data[cutoff_index]
+
+	# start comparing
 	for attr in class_criteria[gear_type]["attributes_needed"]:
 		pattern = re.compile(rf'{attr}(?! from| while| as| with)')
 		if bool(pattern.search(trimmed_item_data)):
@@ -155,20 +157,20 @@ def check_gear_type(item_data):
 
 			# if gear is a weapon
 			if gear_type in WEAPONS_LIST:
+				# find the data index after the inherited attr
 				weapon_inherited_attr = WEAPONS_LIST[gear_type]
 				pattern = rf'([\d.]+)[%\s]*({weapon_inherited_attr})'
 				match = re.search(pattern, item_data)
 				last_index = match.end(2)
-				print(weapon_inherited_attr)
-				print(match.group(1))
-				print(item_data[last_index:])
+				# print(weapon_inherited_attr)
+				# print(match.group(1))
+				# print(item_data[last_index:])
 				return ("Weapon", last_index)
 			else:
+				# if it is not a weapon, find the data index after the gear word
 				pattern = rf'({gear_type})'
 				match = re.search(pattern, item_data)
 				last_index = match.end()
-				print(match.group(1))
-				print(item_data[last_index:])
 				return (gear_type, last_index)
 
 	# if not a gear
