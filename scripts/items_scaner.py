@@ -130,7 +130,7 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 
 			# start comparing
 			match_needed = class_criteria[gear_type]["match_needed"]
-			for attr in class_criteria[gear_type]:
+			for attr in class_criteria[gear_type]["attributes_needed"]:
 				if attr in item_data:
 					match_needed -= 1
 				if match_needed == 0:
