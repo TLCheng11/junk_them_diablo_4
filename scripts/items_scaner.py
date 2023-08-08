@@ -149,3 +149,6 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 def check_marked_as_junk(item_data):
     pattern = re.compile(r'un\s*mark\s*as', re.IGNORECASE)
     return bool(pattern.search(item_data))
+
+# def check_gear_type(item_data):
+
