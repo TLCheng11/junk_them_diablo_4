@@ -8,7 +8,7 @@ import random
 import time
 import re
 
-from criterias import CRITERIAS
+from criterias import CRITERIAS, ALL_GEAR_TYPES, WEAPONS_LIST
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
@@ -112,43 +112,64 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 	if "Upgrades" in item_data:
 		return True
 
+	# check the gear type
+	(gear_type, cutoff_index) = check_gear_type(item_data)
+	if gear_type == "":
+		return True
+
 	class_criteria = criteria[player_class]
-
-	# find out the gear type
-	for gear_type in class_criteria:
-		if gear_type in item_data:
 			
-			#check item tier:
-			tier_needed = False
-			for tier in criteria["Item_teir_to_keep"]:
-				if tier in item_data or tier == "Normal":
-					tier_needed = True
-					break
+	#check item tier:
+	tier_needed = False
+	for tier in criteria["Item_teir_to_keep"]:
+		if tier in item_data or tier == "Normal":
+			tier_needed = True
+			break
 
-			if not tier_needed:
-				return False
+	if not tier_needed:
+		return False
 
-			# start comparing
-			print(item_data)
-			match_needed = class_criteria[gear_type]["match_needed"]
-			for attr in class_criteria[gear_type]["attributes_needed"]:
-				pattern = re.compile(rf'{attr}(?! from| while| as| with)')
-				if bool(pattern.search(item_data)):
-					print(attr, match_needed)
-					match_needed -= 1
-					print(attr, match_needed)
-				if match_needed == 0:
-					return True
-			
-			# return after found and checked one gear_type
-			return False
-	
-	# if it is not a gear, skip
-	return True
+	# start comparing
+	match_needed = class_criteria[gear_type]["match_needed"]
+	trimmed_item_data = item_data[cutoff_index]
+	for attr in class_criteria[gear_type]["attributes_needed"]:
+		pattern = re.compile(rf'{attr}(?! from| while| as| with)')
+		if bool(pattern.search(trimmed_item_data)):
+			print(attr, match_needed)
+			match_needed -= 1
+			print(attr, match_needed)
+		if match_needed == 0:
+			return True
+
+	print("===" * 10)
+	return False
 
 def check_marked_as_junk(item_data):
     pattern = re.compile(r'un\s*mark\s*as', re.IGNORECASE)
     return bool(pattern.search(item_data))
 
-# def check_gear_type(item_data):
+def check_gear_type(item_data):
+	print(item_data)
+	for gear_type in ALL_GEAR_TYPES:
+		if gear_type in item_data:
 
+			# if gear is a weapon
+			if gear_type in WEAPONS_LIST:
+				weapon_inherited_attr = WEAPONS_LIST[gear_type]
+				pattern = rf'([\d.]+)[%\s]*({weapon_inherited_attr})'
+				match = re.search(pattern, item_data)
+				last_index = match.end(2)
+				print(weapon_inherited_attr)
+				print(match.group(1))
+				print(item_data[last_index:])
+				return ("Weapon", last_index)
+			else:
+				pattern = rf'({gear_type})'
+				match = re.search(pattern, item_data)
+				last_index = match.end()
+				print(match.group(1))
+				print(item_data[last_index:])
+				return (gear_type, last_index)
+
+	# if not a gear
+	return ("", -1)

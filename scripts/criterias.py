@@ -92,7 +92,7 @@ CRITERIAS = {
 				"Critical Strike Damage with Imbued Skills": 0,
 			},
 		},
-		"Damage Per Second": {
+		"Weapon": {
 			"match_needed": 3,
 			"attributes_needed": {
 				"Dexterity": 0,
@@ -111,7 +111,7 @@ CRITERIAS = {
     }
 }
 
-ALL_GEAR_TYPES: [
+ALL_GEAR_TYPES = [
 	"Helm",
 	"Chest",
 	"Gloves",
@@ -138,7 +138,7 @@ ALL_GEAR_TYPES: [
 	"Shield",
 ]
 
-WEAPONS_LIST: {
+WEAPONS_LIST = {
 	"Axe": "Damage to Healthy Enemies",
 	"Dagger": "Damage to Close Enemies",
 	"Mace": "Overpower Damage",
