@@ -97,8 +97,8 @@ CRITERIAS = {
 			"attributes_needed": {
 				"Dexterity": 0,
 				"All Stats": 0,
-				"Core Skill Damage": 0,
-				"Critical Strike Damage": 0,
+				# "Core Skill Damage": 0,
+				"Critical Strike Damage": 16,
 				"Critical Strike Damage with Imbued Skills": 0,
 				"Vulnerable Damage": 0,
 			},

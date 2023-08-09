@@ -135,11 +135,11 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 
 	# start comparing
 	for attr in class_criteria[gear_type]["attributes_needed"]:
-		pattern = re.compile(rf'{attr}(?! from| while| as| with)')
-		if bool(pattern.search(trimmed_item_data)):
-			print(attr, match_needed)
+		pattern = re.compile(rf'([\d.]+)[%\s]*{attr}(?! from| while| as| with)')
+		match = re.search(pattern, trimmed_item_data)
+		if match and float(match.group(1)) >= class_criteria[gear_type]["attributes_needed"][attr]:
 			match_needed -= 1
-			print(attr, match_needed)
+			print("+" + match.group(1), attr, " | match needed:", match_needed)
 		if match_needed == 0:
 			return True
 
