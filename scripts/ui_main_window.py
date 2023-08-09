@@ -52,6 +52,7 @@ class Ui_MainWindow(object):
     # function to init class variables
     def init_var(self):
         self.scanning_inventory = False
+        self.inventory_slot_to_check = inventory_slot_to_check[:]
 
     # all functions for widgets
 
@@ -103,8 +104,27 @@ class Ui_MainWindow(object):
                 # curr_btn.setCheckable(True)
                 # curr_btn.setChecked(False)
                 curr_btn.setObjectName("btn_inventory_" + str(row * 11 + col + 1).zfill(2))
+                if self.inventory_slot_to_check[row][col]:
+                    curr_btn.setStyleSheet("background-color: green")
+                else:
+                    curr_btn.setStyleSheet("background-color: red")
+                curr_btn.clicked.connect(self.on_click_btn_inventory)
                 curr_row.addWidget(curr_btn)
             self.verticalLayout_inventory.addLayout(curr_row)
+
+    def on_click_btn_inventory(self):
+        curr_btn = self.centralwidget.sender()
+        if curr_btn:
+            inventory_num = int(curr_btn.text())
+            row = (inventory_num - 1) // 11
+            col = (inventory_num - 1) % 11
+            if self.inventory_slot_to_check[row][col]:
+                self.inventory_slot_to_check[row][col] = 0
+                curr_btn.setStyleSheet("background-color: red")
+            else:
+                self.inventory_slot_to_check[row][col] = 1
+                curr_btn.setStyleSheet("background-color: green")
+            print(self.inventory_slot_to_check)
 
     # btn_start_scan
     def add_btn_start_scan(self):
@@ -122,7 +142,7 @@ class Ui_MainWindow(object):
 
     def start_scan_thread(self):
         window_size = pyautogui.size()
-        start_scan(window_size, inventory_slot_to_check, self)
+        start_scan(window_size, self.inventory_slot_to_check, self)
 
     # btn_abort_scan
     def add_btn_abort_scan(self):
