@@ -1,7 +1,5 @@
 from PIL import ImageGrab
-import numpy as np
 import pygetwindow as gw
-import cv2
 import pytesseract
 import pyautogui
 import random
@@ -93,12 +91,6 @@ def scan_item_attr(window_size, col, x):
 
 	# scan tooltips
 	window_content = ImageGrab.grab(bbox=(left, top, right, bottom))
-
-	# # Convert the Pillow Image to a NumPy array
-	# numpy_array = np.array(window_content)
-
-	# # Convert the image to grayscale
-	# gray_image = cv2.cvtColor(numpy_array, cv2.COLOR_BGR2GRAY)
 
 	extracted_text = pytesseract.image_to_string(window_content)
 
