@@ -10,7 +10,7 @@ from criterias import CRITERIAS, ALL_GEAR_TYPES, WEAPONS_LIST
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-def start_scan(window_size, inventory_slot_to_check, x=1295, y=760):
+def start_scan(window_size, inventory_slot_to_check, ui, x=1295, y=760):
 	# convert start position and inventory dimension with game window resolution
 	x = 1920 * x / window_size.width
 	y = 1080 * y / window_size.height
@@ -30,6 +30,10 @@ def start_scan(window_size, inventory_slot_to_check, x=1295, y=760):
 		for col in range(11):
 			if remaining_slot == 0:
 				print("Done Scanning")
+				return
+
+			if not ui.scanning_inventory:
+				print("Abort Scanning!")
 				return
 
 			print("===" * 10)
@@ -73,6 +77,7 @@ def start_scan(window_size, inventory_slot_to_check, x=1295, y=760):
 		time.sleep(0.01)
 	
 	print("Done Scanning")
+	ui.scanning_inventory = False
 
 
 def scan_item_attr(window_size, col, x):
