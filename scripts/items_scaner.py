@@ -151,27 +151,29 @@ def check_marked_as_junk(item_data):
     return bool(pattern.search(item_data))
 
 def check_gear_type(item_data):
-	print(item_data)
 	for gear_type in ALL_GEAR_TYPES:
 		if gear_type in item_data:
 
 			# if gear is a weapon
-			if gear_type in WEAPONS_LIST:
-				# find the data index after the inherited attr
-				weapon_inherited_attr = WEAPONS_LIST[gear_type]
-				pattern = rf'([\d.]+)[%\s]*({weapon_inherited_attr})'
-				match = re.search(pattern, item_data)
-				last_index = match.end(2)
-				# print(weapon_inherited_attr)
-				# print(match.group(1))
-				# print(item_data[last_index:])
-				return ("Weapon", last_index)
-			else:
-				# if it is not a weapon, find the data index after the gear word
-				pattern = rf'({gear_type})'
-				match = re.search(pattern, item_data)
-				last_index = match.end()
-				return (gear_type, last_index)
+			try:
+				if gear_type in WEAPONS_LIST:
+					# find the data index after the inherited attr
+					weapon_inherited_attr = WEAPONS_LIST[gear_type]
+					pattern = rf'([\d.]+)[%\s]*({weapon_inherited_attr})'
+					match = re.search(pattern, item_data)
+					last_index = match.end(2)
+					# print(weapon_inherited_attr)
+					# print(match.group(1))
+					# print(item_data[last_index:])
+					return ("Weapon", last_index)
+				else:
+					# if it is not a weapon, find the data index after the gear word
+					pattern = rf'({gear_type})'
+					match = re.search(pattern, item_data)
+					last_index = match.end()
+					return (gear_type, last_index)
+			except:
+				return ("", -1)
 
 	# if not a gear
 	return ("", -1)
