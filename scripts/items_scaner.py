@@ -23,10 +23,22 @@ def start_scan(window_size, inventory_slot_to_check, x=1295, y=760):
 	pyautogui.moveTo(x, y, 0.5)
 	time.sleep(0.2)
 
+	remaining_slot = 0
+	for inventory_row in inventory_slot_to_check:
+		remaining_slot += sum(inventory_row)
+
 	# loop through each inventory slot
 	for row in range(3):
 		for col in range(11):
+			if remaining_slot == 0:
+				print("Done Scanning")
+				return
+
+			print("===" * 10)
+			print("inventory slot, row: ",row + 1," column:",col + 1)
+
 			if inventory_slot_to_check[row][col]:
+				remaining_slot -= 1
 				# create a random time lag to create different between each loop action
 				time_lag = random.randint(0, 9) / 100
 
@@ -46,6 +58,9 @@ def start_scan(window_size, inventory_slot_to_check, x=1295, y=760):
 					# mark item as junk
 					time.sleep(0.01 + time_lag)
 					pyautogui.press("space")
+
+			else:
+				print("passed")
 
 			# move mouse horizontally until it reach last slot on the row
 			if col < 10:
@@ -173,6 +188,7 @@ def check_gear_type(item_data):
 					last_index = match.end()
 					return (gear_type, last_index)
 			except:
+				print("gear check failed")
 				return ("", -1)
 
 	# if not a gear
