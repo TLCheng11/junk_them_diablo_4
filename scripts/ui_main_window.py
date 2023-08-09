@@ -1,4 +1,5 @@
 import pyautogui
+import keyboard
 from PyQt5 import QtCore, QtGui, QtWidgets
 import threading
 
@@ -23,6 +24,9 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        # Connect the close event to a custom function
+        MainWindow.closeEvent = self.on_close_event
 
         # init class variables
         self.init_var()
@@ -73,13 +77,21 @@ class Ui_MainWindow(object):
         self.btn_abort_scan.setGeometry(QtCore.QRect(630, 510, 150, 40))
         self.btn_abort_scan.setObjectName("btn_abort_scan")
         self.btn_abort_scan.clicked.connect(self.on_click_btn_abort_scan)
-        self.shortcut_abort_scan = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_A), self.centralwidget)
-        self.shortcut_abort_scan.activated.connect(self.on_click_btn_abort_scan)
+        # self.shortcut_abort_scan = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_A), self.centralwidget)
+        # self.shortcut_abort_scan.activated.connect(self.on_click_btn_abort_scan)
+
+        # Register the Ctrl+A hotkey
+        keyboard.add_hotkey("ctrl+a", self.on_click_btn_abort_scan)
 
     def on_click_btn_abort_scan(self):
         print(self.scanning_inventory)
         self.scanning_inventory = False
         print(self.scanning_inventory)
+
+    # Unhook all hotkeys before closing the window
+    def on_close_event(self, event):
+        keyboard.unhook_all()
+        event.accept()
     
     # retranslateUi
     def retranslateUi(self, MainWindow):
