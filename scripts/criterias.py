@@ -31,7 +31,7 @@ CRITERIAS = {
 			},
         },
         "Gloves": {
-			"match_needed": 2,
+			"match_needed": 3,
 			"attributes_needed": {
 				"Attack Speed": 0,
 				"Critical Strike Chance": 0,

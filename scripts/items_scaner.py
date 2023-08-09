@@ -73,6 +73,8 @@ def start_scan(window_size, inventory_slot_to_check, x=1295, y=760):
 		y += inventory_slot_height
 		pyautogui.moveTo(x, y, 0.5)
 		time.sleep(0.01)
+	
+	print("Done Scanning")
 
 
 def scan_item_attr(window_size, col, x):
@@ -92,13 +94,13 @@ def scan_item_attr(window_size, col, x):
 	# scan tooltips
 	window_content = ImageGrab.grab(bbox=(left, top, right, bottom))
 
-	# Convert the Pillow Image to a NumPy array
-	numpy_array = np.array(window_content)
+	# # Convert the Pillow Image to a NumPy array
+	# numpy_array = np.array(window_content)
 
-	# Convert the image to grayscale
-	gray_image = cv2.cvtColor(numpy_array, cv2.COLOR_BGR2GRAY)
+	# # Convert the image to grayscale
+	# gray_image = cv2.cvtColor(numpy_array, cv2.COLOR_BGR2GRAY)
 
-	extracted_text = pytesseract.image_to_string(gray_image)
+	extracted_text = pytesseract.image_to_string(window_content)
 
 	return extracted_text
 
@@ -127,6 +129,7 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 	if "Upgrades" in item_data:
 		return True
 
+	print(item_data)
 	# check the gear type
 	(gear_type, cutoff_index) = check_gear_type(item_data)
 	if gear_type == "":
@@ -150,7 +153,7 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 
 	# start comparing
 	for attr in class_criteria[gear_type]["attributes_needed"]:
-		pattern = re.compile(rf'([\d.]+)[%\s]*{attr}(?! from| while| as| with)')
+		pattern = re.compile(rf'([\d.]+)[%\s]*{attr}(?! [a-zA-Z])')
 		match = re.search(pattern, trimmed_item_data)
 		if match and float(match.group(1)) >= class_criteria[gear_type]["attributes_needed"][attr]:
 			match_needed -= 1
