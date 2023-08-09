@@ -32,6 +32,7 @@ class Ui_MainWindow(object):
         self.init_var()
 
         # add widgets
+        self.add_group_inventory()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
 
@@ -52,7 +53,59 @@ class Ui_MainWindow(object):
     def init_var(self):
         self.scanning_inventory = False
 
-    # function for widgets
+    # all functions for widgets
+
+    # group_inventory
+    # container
+    def add_group_inventory(self):
+        self.group_inventory = QtWidgets.QGroupBox(self.centralwidget)
+        self.group_inventory.setGeometry(QtCore.QRect(10, 370, 390, 180))
+        self.group_inventory.setObjectName("group_inventory")
+
+        # rows
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.group_inventory)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 10, 390, 170))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout_inventory = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout_inventory.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout_inventory.setSpacing(5)
+        self.verticalLayout_inventory.setObjectName("verticalLayout_inventory")
+
+        # colums
+        self.horizontalLayout_inventory_row_1 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_inventory_row_1.setContentsMargins(0, -1, 0, 0)
+        self.horizontalLayout_inventory_row_1.setObjectName("horizontalLayout_inventory_row_1")
+        self.horizontalLayout_inventory_row_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_inventory_row_2.setContentsMargins(0, -1, 0, 0)
+        self.horizontalLayout_inventory_row_2.setObjectName("horizontalLayout_inventory_row_2")
+        self.horizontalLayout_inventory_row_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_inventory_row_3.setContentsMargins(0, -1, 0, 0)
+        self.horizontalLayout_inventory_row_3.setObjectName("horizontalLayout_inventory_row_3")
+
+        # array to hold button objects
+        self.inventory_btns = [[None] * 11 for _ in range(3)]
+        for row in range(3):
+            if row == 0:
+                curr_row = self.horizontalLayout_inventory_row_1
+            elif row == 1:
+                curr_row = self.horizontalLayout_inventory_row_2
+            else:
+                curr_row = self.horizontalLayout_inventory_row_3
+            for col in range(11):
+                self.inventory_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget)
+                curr_btn = self.inventory_btns[row][col]
+                # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+                # sizePolicy.setHorizontalStretch(0)
+                # sizePolicy.setVerticalStretch(0)
+                # sizePolicy.setHeightForWidth(curr_btn.sizePolicy().hasHeightForWidth())
+                # curr_btn.setSizePolicy(sizePolicy)
+                curr_btn.setMaximumSize(QtCore.QSize(30, 50))
+                # curr_btn.setCheckable(True)
+                # curr_btn.setChecked(False)
+                curr_btn.setObjectName("btn_inventory_" + str(row * 11 + col + 1).zfill(2))
+                curr_row.addWidget(curr_btn)
+            self.verticalLayout_inventory.addLayout(curr_row)
+
     # btn_start_scan
     def add_btn_start_scan(self):
         self.btn_start_scan = QtWidgets.QPushButton(self.centralwidget)
@@ -97,6 +150,11 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.group_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
+        for row in range(3):
+            for col in range(11):
+                curr_num = str(row * 11 + col + 1).zfill(2)
+                self.inventory_btns[row][col].setText(_translate("MainWindow", curr_num))
         self.btn_start_scan.setText(_translate("MainWindow", "Start"))
         self.btn_abort_scan.setText(_translate("MainWindow", "Abort Ctrl+A"))
 
