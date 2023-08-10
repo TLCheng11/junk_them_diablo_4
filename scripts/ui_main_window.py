@@ -1,6 +1,6 @@
+from PyQt5 import QtCore, QtGui, QtWidgets
 import pyautogui
 import keyboard
-from PyQt5 import QtCore, QtGui, QtWidgets
 import threading
 
 from items_scaner import start_scan
@@ -42,6 +42,7 @@ class Ui_MainWindow(object):
 
         # add widgets
         self.add_groupBox_items()
+        self.add_groupBox_classes()
         self.add_groupBox_inventory()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
@@ -51,18 +52,26 @@ class Ui_MainWindow(object):
     
     # function to init class variables
     def init_var(self):
+        # for abort operation
         self.scanning_inventory = False
-        self.inventory_slot_to_check = inventory_slot_to_check[:]
+
+        # for groupBox_items
         self.items_names = [
             ["Helm", "Chest", "Gloves", "Pants", "Boots"],
             ["Amulet", "Ring", "1-Hand", "2-Hand", "Off-H"],
         ]
         self.curr_item = ("", -1, -1)
+
+        # for groupBox_classes
+        self.classes_names = ["All", "Barb", "Druid", "Necro", "Rogue", "Sorc"]
         self.curr_class = ("", -1)
 
-    # all functions for widgets
+        # for groupBox_inventory
+        self.inventory_slot_to_check = inventory_slot_to_check[:]
 
-    # menu
+    # ----- all functions for widgets -----
+
+    # - menu -
     def add_menu_bar(self, MainWindow):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
@@ -87,8 +96,7 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuFile.menuAction())
 
-    # groupBox_items
-    # container
+    # - groupBox_items -
     def add_groupBox_items(self):
         self.groupBox_items = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_items.setGeometry(QtCore.QRect(10, 10, 390, 140))
@@ -115,7 +123,7 @@ class Ui_MainWindow(object):
                 curr_btn.setMaximumSize(QtCore.QSize(50, 50))
                 curr_btn.setObjectName("btn_items_" + self.items_names[row][col].replace("-", "_"))
                 if self.items_names[row][col] == self.curr_item[0]:
-                    curr_btn.setStyleSheet("background-color: green")
+                    curr_btn.setStyleSheet("border: 2px solid yellow")
                 curr_btn.clicked.connect(self.on_click_btn_items)
                 curr_row.addWidget(curr_btn)
             self.verticalLayout_items.addLayout(curr_row)
@@ -144,8 +152,36 @@ class Ui_MainWindow(object):
                 curr_btn.setStyleSheet("border: 2px solid yellow")
                 self.curr_item = (item_name, row, col)
 
-    # groupBox_inventory
-    # container
+    # - groupBox_classes -
+    def add_groupBox_classes(self):
+        self.groupBox_classes = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_classes.setGeometry(QtCore.QRect(10, 160, 390, 80))
+        self.groupBox_classes.setObjectName("groupBox_classes")
+
+        self.horizontalLayoutWidget_classes = QtWidgets.QWidget(self.groupBox_classes)
+        self.horizontalLayoutWidget_classes.setGeometry(QtCore.QRect(10, 15, 370, 60))
+        self.horizontalLayoutWidget_classes.setObjectName("horizontalLayoutWidget_classes")
+        self.horizontalLayout_classes = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_classes)
+        self.horizontalLayout_classes.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_classes.setObjectName("horizontalLayout_classes")
+
+        # array to hold button objects
+        self.classes_btns = [None] * len(self.classes_names)
+
+        for col in range(len(self.classes_names)):
+            self.classes_btns[col] = QtWidgets.QPushButton(self.horizontalLayoutWidget_classes)
+            curr_btn = self.classes_btns[col]
+            curr_btn.setMaximumSize(QtCore.QSize(50, 50))
+            curr_btn.setObjectName("btn_classes_" + self.classes_names[col])
+            if self.classes_names[col] == self.curr_class[0]:
+                curr_btn.setStyleSheet("border: 2px solid yellow")
+            curr_btn.clicked.connect(self.on_click_btn_classes)
+            self.horizontalLayout_classes.addWidget(curr_btn)
+
+    def on_click_btn_classes(self):
+        pass
+
+    # - groupBox_inventory -
     def add_groupBox_inventory(self):
         self.groupBox_inventory = QtWidgets.QGroupBox(self.centralwidget)
         self.groupBox_inventory.setGeometry(QtCore.QRect(10, 370, 390, 180))
@@ -195,6 +231,7 @@ class Ui_MainWindow(object):
                 self.inventory_slot_to_check[row][col] = 1
                 curr_btn.setStyleSheet("background-color: green")
 
+    # - start and abort btn -
     # btn_start_scan
     def add_btn_start_scan(self):
         self.btn_start_scan = QtWidgets.QPushButton(self.centralwidget)
@@ -231,6 +268,7 @@ class Ui_MainWindow(object):
     def on_click_btn_abort_scan(self):
         self.scanning_inventory = False
 
+    # - helper -
     # Unhook all hotkeys before closing the window
     def on_close_event(self, event):
         keyboard.unhook_all()
@@ -261,6 +299,11 @@ class Ui_MainWindow(object):
         for row in range(len(self.items_btns)):
             for col in range(len(self.items_btns[row])):
                 self.items_btns[row][col].setText(_translate("MainWindow", self.items_names[row][col]))
+
+        # classes
+        self.groupBox_classes.setTitle(_translate("MainWindow", "Classes"))
+        for col in range(len(self.classes_btns)):
+            self.classes_btns[col].setText(_translate("MainWindow", self.classes_names[col]))
 
         # inventory
         self.groupBox_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
