@@ -42,10 +42,10 @@ class Ui_MainWindow(object):
 
 
         # add widgets
-        self.add_groupBox_items()
-        self.add_groupBox_classes()
-        self.add_groupBox_inventory()
-        self.add_groupBox_attributes()
+        self.add_group_box_items()
+        self.add_group_box_classes()
+        self.add_group_box_inventory()
+        self.add_group_box_attributes()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
 
@@ -57,18 +57,18 @@ class Ui_MainWindow(object):
         # for abort operation
         self.scanning_inventory = False
 
-        # for groupBox_items
+        # for group_box_items
         self.items_names = [
             ["Helm", "Chest", "Gloves", "Pants", "Boots"],
             ["Amulet", "Ring", "1-Hand", "2-Hand", "Off-H"],
         ]
         self.curr_item = ("", -1, -1)
 
-        # for groupBox_classes
+        # for group_box_classes
         self.classes_names = ["All", "Barb", "Druid", "Necro", "Rogue", "Sorc"]
         self.curr_class = ("All", 0)
 
-        # for groupBox_attributes
+        # for group_box_attributes
         self.curr_item_full_text = {
             "": "Please select an item above",
             "Helm": "Helm",
@@ -92,7 +92,7 @@ class Ui_MainWindow(object):
             "Sorc": "Sorcerer",
         }
 
-        # for groupBox_inventory
+        # for group_box_inventory
         self.inventory_slot_to_check = inventory_slot_to_check[:]
 
     # ----- all functions for widgets -----
@@ -101,8 +101,8 @@ class Ui_MainWindow(object):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
         self.menubar.setObjectName("menubar")
-        self.menuFile = QtWidgets.QMenu(self.menubar)
-        self.menuFile.setObjectName("menuFile")
+        self.menu_file = QtWidgets.QMenu(self.menubar)
+        self.menu_file.setObjectName("menu_file")
         MainWindow.setMenuBar(self.menubar)
 
         self.menu_action_new = QtWidgets.QAction(MainWindow)
@@ -114,25 +114,25 @@ class Ui_MainWindow(object):
         self.menu_action_exit = QtWidgets.QAction(MainWindow)
         self.menu_action_exit.setObjectName("menu_action_exit")
 
-        self.menuFile.addAction(self.menu_action_new)
-        self.menuFile.addAction(self.menu_action_save)
-        self.menuFile.addAction(self.menu_action_load)
-        self.menuFile.addAction(self.menu_action_exit)
+        self.menu_file.addAction(self.menu_action_new)
+        self.menu_file.addAction(self.menu_action_save)
+        self.menu_file.addAction(self.menu_action_load)
+        self.menu_file.addAction(self.menu_action_exit)
 
-        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menu_file.menuAction())
 
-    # - groupBox_items -
-    def add_groupBox_items(self):
-        self.groupBox_items = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_items.setGeometry(QtCore.QRect(10, 10, 390, 140))
-        self.groupBox_items.setObjectName("groupBox_items")
+    # - group_box_items -
+    def add_group_box_items(self):
+        self.group_box_items = QtWidgets.QGroupBox(self.centralwidget)
+        self.group_box_items.setGeometry(QtCore.QRect(10, 10, 390, 140))
+        self.group_box_items.setObjectName("group_box_items")
 
-        self.verticalLayoutWidget_items = QtWidgets.QWidget(self.groupBox_items)
-        self.verticalLayoutWidget_items.setGeometry(QtCore.QRect(10, 15, 370, 120))
-        self.verticalLayoutWidget_items.setObjectName("verticalLayoutWidget_items")
-        self.verticalLayout_items = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_items)
-        self.verticalLayout_items.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_items.setObjectName("verticalLayout_items")
+        self.vertical_layout_widget_items = QtWidgets.QWidget(self.group_box_items)
+        self.vertical_layout_widget_items.setGeometry(QtCore.QRect(10, 15, 370, 120))
+        self.vertical_layout_widget_items.setObjectName("vertical_layout_widget_items")
+        self.vertical_layout_items = QtWidgets.QVBoxLayout(self.vertical_layout_widget_items)
+        self.vertical_layout_items.setContentsMargins(0, 0, 0, 0)
+        self.vertical_layout_items.setObjectName("vertical_layout_items")
 
         # array to hold button objects
         self.items_btns = [[None] * 5 for _ in range(2)]
@@ -140,10 +140,10 @@ class Ui_MainWindow(object):
         for row in range(2):
             # create horizontal layout for each row
             curr_row = QtWidgets.QHBoxLayout()
-            curr_row.setObjectName("horizontalLayout_items_row_" + str(row + 1))
+            curr_row.setObjectName("horizontal_layout_items_row_" + str(row + 1))
 
             for col in range(5):
-                self.items_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget_items)
+                self.items_btns[row][col] = QtWidgets.QPushButton(self.vertical_layout_widget_items)
                 curr_btn = self.items_btns[row][col]
                 curr_btn.setMaximumSize(QtCore.QSize(50, 50))
                 curr_btn.setObjectName("btn_items_" + self.items_names[row][col].replace("-", "_"))
@@ -151,7 +151,7 @@ class Ui_MainWindow(object):
                     curr_btn.setStyleSheet("border: 2px solid yellow")
                 curr_btn.clicked.connect(self.on_click_btn_items)
                 curr_row.addWidget(curr_btn)
-            self.verticalLayout_items.addLayout(curr_row)
+            self.vertical_layout_items.addLayout(curr_row)
 
     def on_click_btn_items(self):
         curr_btn = self.centralwidget.sender()
@@ -178,33 +178,33 @@ class Ui_MainWindow(object):
                 self.curr_item = (item_name, row, col)
 
             self.update_label_text(self.label_curr_item, self.curr_item_full_text[self.curr_item[0]])
-            self.update_comboBox_items(self.comboBox_attributes)
+            self.update_combo_box_items(self.combo_box_attributes)
 
-    # - groupBox_classes -
-    def add_groupBox_classes(self):
-        self.groupBox_classes = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_classes.setGeometry(QtCore.QRect(10, 160, 390, 80))
-        self.groupBox_classes.setObjectName("groupBox_classes")
+    # - group_box_classes -
+    def add_group_box_classes(self):
+        self.group_box_classes = QtWidgets.QGroupBox(self.centralwidget)
+        self.group_box_classes.setGeometry(QtCore.QRect(10, 160, 390, 80))
+        self.group_box_classes.setObjectName("group_box_classes")
 
-        self.horizontalLayoutWidget_classes = QtWidgets.QWidget(self.groupBox_classes)
-        self.horizontalLayoutWidget_classes.setGeometry(QtCore.QRect(10, 15, 370, 60))
-        self.horizontalLayoutWidget_classes.setObjectName("horizontalLayoutWidget_classes")
-        self.horizontalLayout_classes = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_classes)
-        self.horizontalLayout_classes.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_classes.setObjectName("horizontalLayout_classes")
+        self.horizontal_layout_widget_classes = QtWidgets.QWidget(self.group_box_classes)
+        self.horizontal_layout_widget_classes.setGeometry(QtCore.QRect(10, 15, 370, 60))
+        self.horizontal_layout_widget_classes.setObjectName("horizontal_layout_widget_classes")
+        self.horizontal_layout_classes = QtWidgets.QHBoxLayout(self.horizontal_layout_widget_classes)
+        self.horizontal_layout_classes.setContentsMargins(0, 0, 0, 0)
+        self.horizontal_layout_classes.setObjectName("horizontal_layout_classes")
 
         # array to hold button objects
         self.classes_btns = [None] * len(self.classes_names)
 
         for col in range(len(self.classes_names)):
-            self.classes_btns[col] = QtWidgets.QPushButton(self.horizontalLayoutWidget_classes)
+            self.classes_btns[col] = QtWidgets.QPushButton(self.horizontal_layout_widget_classes)
             curr_btn = self.classes_btns[col]
             curr_btn.setMaximumSize(QtCore.QSize(50, 50))
             curr_btn.setObjectName("btn_classes_" + self.classes_names[col])
             if self.classes_names[col] == self.curr_class[0]:
                 curr_btn.setStyleSheet("border: 2px solid yellow")
             curr_btn.clicked.connect(self.on_click_btn_classes)
-            self.horizontalLayout_classes.addWidget(curr_btn)
+            self.horizontal_layout_classes.addWidget(curr_btn)
 
     def on_click_btn_classes(self):
         curr_btn = self.centralwidget.sender()
@@ -234,66 +234,66 @@ class Ui_MainWindow(object):
                 self.curr_class = (class_name, idx)
             
             self.update_label_text(self.label_curr_class, self.curr_class_full_text[self.curr_class[0]])
-            self.update_comboBox_items(self.comboBox_attributes)
+            self.update_combo_box_items(self.combo_box_attributes)
 
-    # - groupBox_attributes -
-    def add_groupBox_attributes(self):
-        self.groupBox_attributes = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_attributes.setGeometry(QtCore.QRect(10, 270, 390, 80))
-        self.groupBox_attributes.setObjectName("groupBox_attributes")
+    # - group_box_attributes -
+    def add_group_box_attributes(self):
+        self.group_box_attributes = QtWidgets.QGroupBox(self.centralwidget)
+        self.group_box_attributes.setGeometry(QtCore.QRect(10, 270, 390, 80))
+        self.group_box_attributes.setObjectName("group_box_attributes")
 
-        self.label_curr_item = QtWidgets.QLabel(self.groupBox_attributes)
+        self.label_curr_item = QtWidgets.QLabel(self.group_box_attributes)
         self.label_curr_item.setGeometry(QtCore.QRect(10, 22, 150, 16))
         self.label_curr_item.setObjectName("label_curr_item")
 
-        self.label_curr_class = QtWidgets.QLabel(self.groupBox_attributes)
+        self.label_curr_class = QtWidgets.QLabel(self.group_box_attributes)
         self.label_curr_class.setGeometry(QtCore.QRect(170, 22, 100, 16))
         self.label_curr_class.setObjectName("label_curr_class")
 
-        self.btn_add_attr = QtWidgets.QPushButton(self.groupBox_attributes)
+        self.btn_add_attr = QtWidgets.QPushButton(self.group_box_attributes)
         self.btn_add_attr.setGeometry(QtCore.QRect(305, 20, 75, 20))
         self.btn_add_attr.setObjectName("btn_add_attr")
 
-        self.comboBox_attributes = QtWidgets.QComboBox(self.groupBox_attributes)
-        self.comboBox_attributes.setGeometry(QtCore.QRect(10, 45, 320, 21))
-        self.comboBox_attributes.setObjectName("comboBox_attributes")
+        self.combo_box_attributes = QtWidgets.QComboBox(self.group_box_attributes)
+        self.combo_box_attributes.setGeometry(QtCore.QRect(10, 45, 320, 21))
+        self.combo_box_attributes.setObjectName("combo_box_attributes")
 
-        self.doubleSpinBox_attributes = QtWidgets.QDoubleSpinBox(self.groupBox_attributes)
-        self.doubleSpinBox_attributes.setGeometry(QtCore.QRect(340, 45, 40, 21))
-        self.doubleSpinBox_attributes.setDecimals(1)
-        self.doubleSpinBox_attributes.setSingleStep(0.1)
-        self.doubleSpinBox_attributes.setMaximum(0)
-        self.doubleSpinBox_attributes.setObjectName("doubleSpinBox_attributes")
+        self.double_spin_box_attributes = QtWidgets.QDoubleSpinBox(self.group_box_attributes)
+        self.double_spin_box_attributes.setGeometry(QtCore.QRect(340, 45, 40, 21))
+        self.double_spin_box_attributes.setDecimals(1)
+        self.double_spin_box_attributes.setSingleStep(0.1)
+        self.double_spin_box_attributes.setMaximum(0)
+        self.double_spin_box_attributes.setObjectName("double_spin_box_attributes")
 
     def update_label_text(self, label, text):
         _translate = QtCore.QCoreApplication.translate
         label.setText(_translate("MainWindow", text))
 
-    def update_comboBox_items(self, comboBox):
+    def update_combo_box_items(self, combo_box):
         # clean up box 
-        comboBox.clear()
+        combo_box.clear()
 
         # only add attibutes to the box if an item is selected
         if self.curr_item[0]:
             item_name = self.curr_item_full_text[self.curr_item[0]]
             class_name = self.curr_class_full_text[self.curr_class[0]]
             for attr in ITEM_ATTR_LIST[item_name][class_name]:
-                comboBox.addItem(attr)
+                combo_box.addItem(attr)
 
-    # - groupBox_inventory -
-    def add_groupBox_inventory(self):
-        self.groupBox_inventory = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_inventory.setGeometry(QtCore.QRect(10, 370, 390, 180))
-        self.groupBox_inventory.setObjectName("groupBox_inventory")
+    # - group_box_inventory -
+    def add_group_box_inventory(self):
+        self.group_box_inventory = QtWidgets.QGroupBox(self.centralwidget)
+        self.group_box_inventory.setGeometry(QtCore.QRect(10, 370, 390, 180))
+        self.group_box_inventory.setObjectName("group_box_inventory")
 
         # rows
-        self.verticalLayoutWidget_inventory = QtWidgets.QWidget(self.groupBox_inventory)
-        self.verticalLayoutWidget_inventory.setGeometry(QtCore.QRect(0, 10, 390, 170))
-        self.verticalLayoutWidget_inventory.setObjectName("verticalLayoutWidget_inventory")
-        self.verticalLayout_inventory = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_inventory)
-        self.verticalLayout_inventory.setContentsMargins(5, 5, 5, 5)
-        self.verticalLayout_inventory.setSpacing(5)
-        self.verticalLayout_inventory.setObjectName("verticalLayout_inventory")
+        self.vertical_layout_widget_inventory = QtWidgets.QWidget(self.group_box_inventory)
+        self.vertical_layout_widget_inventory.setGeometry(QtCore.QRect(0, 10, 390, 170))
+        self.vertical_layout_widget_inventory.setObjectName("vertical_layout_widget_inventory")
+        self.vertical_layout_inventory = QtWidgets.QVBoxLayout(self.vertical_layout_widget_inventory)
+        self.vertical_layout_inventory.setContentsMargins(5, 5, 5, 5)
+        self.vertical_layout_inventory.setSpacing(5)
+        self.vertical_layout_inventory.setObjectName("vertical_layout_inventory")
 
         # array to hold button objects
         self.inventory_btns = [[None] * 11 for _ in range(3)]
@@ -302,10 +302,10 @@ class Ui_MainWindow(object):
             curr_row = QtWidgets.QHBoxLayout()
             curr_row.setContentsMargins(0, -1, 0, 0)
             curr_row.setSpacing(5)
-            curr_row.setObjectName("horizontalLayout_inventory_row_" + str(row + 1))
+            curr_row.setObjectName("horizontal_layout_inventory_row_" + str(row + 1))
 
             for col in range(11):
-                self.inventory_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget_inventory)
+                self.inventory_btns[row][col] = QtWidgets.QPushButton(self.vertical_layout_widget_inventory)
                 curr_btn = self.inventory_btns[row][col]
                 curr_btn.setMaximumSize(QtCore.QSize(30, 50))
                 curr_btn.setObjectName("btn_inventory_" + str(row * 11 + col + 1).zfill(2))
@@ -315,7 +315,7 @@ class Ui_MainWindow(object):
                     curr_btn.setStyleSheet("background-color: red")
                 curr_btn.clicked.connect(self.on_click_btn_inventory)
                 curr_row.addWidget(curr_btn)
-            self.verticalLayout_inventory.addLayout(curr_row)
+            self.vertical_layout_inventory.addLayout(curr_row)
 
     def on_click_btn_inventory(self):
         curr_btn = self.centralwidget.sender()
@@ -376,10 +376,10 @@ class Ui_MainWindow(object):
     # retranslateUi
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Junk Them!"))
 
         # menu items
-        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.menu_file.setTitle(_translate("MainWindow", "File"))
         self.menu_action_new.setText(_translate("MainWindow", "New"))
         self.menu_action_new.setStatusTip(_translate("MainWindow", "Create new file"))
         self.menu_action_new.setShortcut(_translate("MainWindow", "Ctrl+N"))
@@ -394,24 +394,24 @@ class Ui_MainWindow(object):
         self.menu_action_exit.setShortcut(_translate("MainWindow", "Ctrl+E"))
 
         # items
-        self.groupBox_items.setTitle(_translate("MainWindow", "Items"))
+        self.group_box_items.setTitle(_translate("MainWindow", "Items"))
         for row in range(len(self.items_btns)):
             for col in range(len(self.items_btns[row])):
                 self.items_btns[row][col].setText(_translate("MainWindow", self.items_names[row][col]))
 
         # classes
-        self.groupBox_classes.setTitle(_translate("MainWindow", "Classes"))
+        self.group_box_classes.setTitle(_translate("MainWindow", "Classes"))
         for col in range(len(self.classes_btns)):
             self.classes_btns[col].setText(_translate("MainWindow", self.classes_names[col]))
 
         # attributes
-        self.groupBox_attributes.setTitle(_translate("MainWindow", "Attributes"))
+        self.group_box_attributes.setTitle(_translate("MainWindow", "Attributes"))
         self.label_curr_item.setText(_translate("MainWindow", self.curr_item_full_text[self.curr_item[0]]))
         self.label_curr_class.setText(_translate("MainWindow", self.curr_class_full_text[self.curr_class[0]]))
         self.btn_add_attr.setText(_translate("MainWindow", "Add Attr"))
 
         # inventory
-        self.groupBox_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
+        self.group_box_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
         for row in range(3):
             for col in range(11):
                 curr_num = str(row * 11 + col + 1).zfill(2)
