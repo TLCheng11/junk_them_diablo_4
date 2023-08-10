@@ -57,6 +57,70 @@ class Ui_MainWindow(object):
         # for abort operation
         self.scanning_inventory = False
 
+        # criterias for item scan
+        self.criterias = {
+            "Helm": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Chest": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Gloves": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Pants": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Boots": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Amulet": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Ring": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "One-Handed Weapon": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Two-Handed Weapon": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+            "Off Hand": {
+                "match_needed": 3,
+                "attributes_needed": {
+
+                },
+            },
+        }
+
         # for group_box_items
         self.items_names = [
             ["Helm", "Chest", "Gloves", "Pants", "Boots"],
@@ -256,6 +320,7 @@ class Ui_MainWindow(object):
         self.btn_add_attr = QtWidgets.QPushButton(self.group_box_attributes)
         self.btn_add_attr.setGeometry(QtCore.QRect(305, 20, 75, 20))
         self.btn_add_attr.setObjectName("btn_add_attr")
+        self.btn_add_attr.clicked.connect(self.on_click_btn_add_attr)
 
         self.combo_box_attributes = QtWidgets.QComboBox(self.group_box_attributes)
         self.combo_box_attributes.setGeometry(QtCore.QRect(10, 45, 310, 21))
@@ -314,6 +379,10 @@ class Ui_MainWindow(object):
         self.double_spin_box_attributes.setValue(0.0)
         self.double_spin_box_attributes.setMaximum(max_value)
 
+    def on_click_btn_add_attr(self):
+        if self.selected_attribute:
+            item_name = self.curr_item_full_text[self.curr_item[0]]
+            self.criterias[item_name]["attributes_needed"][self.selected_attribute] = round(self.double_spin_box_attributes.value(), 1)
 
     # - group_box_inventory -
     def add_group_box_inventory(self):
