@@ -55,10 +55,10 @@ class Ui_MainWindow(object):
         self.inventory_slot_to_check = inventory_slot_to_check[:]
         self.items_names = [
             ["Helm", "Chest", "Gloves", "Pants", "Boots"],
-            ["Amulet", "Ring", "1 Hand", "2 Hand", "Off H"],
+            ["Amulet", "Ring", "1-Hand", "2-Hand", "Off-H"],
         ]
-        self.curr_item = ""
-        self.curr_class = ""
+        self.curr_item = ("", -1, -1)
+        self.curr_class = ("", -1)
 
     # all functions for widgets
 
@@ -113,15 +113,36 @@ class Ui_MainWindow(object):
                 self.items_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget_items)
                 curr_btn = self.items_btns[row][col]
                 curr_btn.setMaximumSize(QtCore.QSize(50, 50))
-                curr_btn.setObjectName("btn_items_" + self.items_names[row][col].replace(" ", "_"))
-                if self.items_names[row][col] == self.curr_item:
+                curr_btn.setObjectName("btn_items_" + self.items_names[row][col].replace("-", "_"))
+                if self.items_names[row][col] == self.curr_item[0]:
                     curr_btn.setStyleSheet("background-color: green")
                 curr_btn.clicked.connect(self.on_click_btn_items)
                 curr_row.addWidget(curr_btn)
             self.verticalLayout_items.addLayout(curr_row)
 
     def on_click_btn_items(self):
-        pass
+        curr_btn = self.centralwidget.sender()
+        if curr_btn:
+            item_name = curr_btn.text()
+
+            # if the btn was selected before, change its color to deflaut, clear curr_item
+            if item_name == self.curr_item[0]:
+                curr_btn.setStyleSheet("")
+                self.curr_item = ("", -1, -1)
+            else:
+                # find the row and col index of the btn
+                idx = (self.items_names[0] + self.items_names[1]).index(item_name)
+                row = idx // 5
+                col = idx % 5
+
+                # if other items was selected before, reset color of previous btn to deflaut
+                if self.curr_item[0]:
+                    last_item_btn = self.items_btns[self.curr_item[1]][self.curr_item[2]]
+                    last_item_btn.setStyleSheet("")
+                
+                # set curr_item to the item of the btn and change btn color to green
+                curr_btn.setStyleSheet("border: 2px solid yellow")
+                self.curr_item = (item_name, row, col)
 
     # groupBox_inventory
     # container
