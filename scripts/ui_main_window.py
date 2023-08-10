@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
             "Ring": "Ring",
             "1-Hand": "One-Handed Weapon",
             "2-Hand": "Two-Handed Weapon",
-            "Off-Hand": "Off Hand",
+            "Off-H": "Off Hand",
         }
 
         self.curr_class_full_text = {
@@ -176,6 +176,8 @@ class Ui_MainWindow(object):
                 curr_btn.setStyleSheet("border: 2px solid yellow")
                 self.curr_item = (item_name, row, col)
 
+            self.update_label_text(self.label_curr_item, self.curr_item_full_text[self.curr_item[0]])
+
     # - groupBox_classes -
     def add_groupBox_classes(self):
         self.groupBox_classes = QtWidgets.QGroupBox(self.centralwidget)
@@ -228,6 +230,8 @@ class Ui_MainWindow(object):
                 # set curr_class to the item of the btn and change btn color to green
                 curr_btn.setStyleSheet("border: 2px solid yellow")
                 self.curr_class = (class_name, idx)
+            
+            self.update_label_text(self.label_curr_class, self.curr_class_full_text[self.curr_class[0]])
 
     # - groupBox_attributes -
     def add_groupBox_attributes(self):
@@ -236,11 +240,11 @@ class Ui_MainWindow(object):
         self.groupBox_attributes.setObjectName("groupBox_attributes")
 
         self.label_curr_item = QtWidgets.QLabel(self.groupBox_attributes)
-        self.label_curr_item.setGeometry(QtCore.QRect(10, 22, 170, 16))
+        self.label_curr_item.setGeometry(QtCore.QRect(10, 22, 150, 16))
         self.label_curr_item.setObjectName("label_curr_item")
 
         self.label_curr_class = QtWidgets.QLabel(self.groupBox_attributes)
-        self.label_curr_class.setGeometry(QtCore.QRect(190, 22, 100, 16))
+        self.label_curr_class.setGeometry(QtCore.QRect(170, 22, 100, 16))
         self.label_curr_class.setObjectName("label_curr_class")
 
         self.btn_add_attr = QtWidgets.QPushButton(self.groupBox_attributes)
@@ -257,6 +261,10 @@ class Ui_MainWindow(object):
         self.doubleSpinBox_attributes.setSingleStep(0.1)
         self.doubleSpinBox_attributes.setMaximum(0)
         self.doubleSpinBox_attributes.setObjectName("doubleSpinBox_attributes")
+
+    def update_label_text(self, label, text):
+        _translate = QtCore.QCoreApplication.translate
+        label.setText(_translate("MainWindow", text))
 
     # - groupBox_inventory -
     def add_groupBox_inventory(self):
