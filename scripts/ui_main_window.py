@@ -149,6 +149,9 @@ class Ui_MainWindow(object):
         self.btn_start_scan.setObjectName("btn_start_scan")
         self.btn_start_scan.clicked.connect(self.on_click_btn_start_scan)
 
+        # Register the Left Shift+X hotkey
+        keyboard.add_hotkey("left shift + x", self.on_click_btn_start_scan)
+
     def on_click_btn_start_scan(self):
         self.scanning_inventory = True
 
@@ -169,8 +172,8 @@ class Ui_MainWindow(object):
         # self.shortcut_abort_scan = QtWidgets.QShortcut(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_A), self.centralwidget)
         # self.shortcut_abort_scan.activated.connect(self.on_click_btn_abort_scan)
 
-        # Register the Ctrl+A hotkey
-        keyboard.add_hotkey("ctrl+x", self.on_click_btn_abort_scan)
+        # Register the Ctrl+X hotkey
+        keyboard.add_hotkey("ctrl + x", self.on_click_btn_abort_scan)
 
     def on_click_btn_abort_scan(self):
         self.scanning_inventory = False
@@ -208,8 +211,8 @@ class Ui_MainWindow(object):
                 self.inventory_btns[row][col].setText(_translate("MainWindow", curr_num))
 
         # start / abort btn
-        self.btn_start_scan.setText(_translate("MainWindow", "Start"))
-        self.btn_abort_scan.setText(_translate("MainWindow", "Abort Ctrl+x"))
+        self.btn_start_scan.setText(_translate("MainWindow", "Start (Left Shift + X)"))
+        self.btn_abort_scan.setText(_translate("MainWindow", "Abort (Ctrl + X)"))
 
 def open_ui():
     import sys
