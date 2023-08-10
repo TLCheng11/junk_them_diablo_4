@@ -92,6 +92,9 @@ class Ui_MainWindow(object):
             "Sorc": "Sorcerer",
         }
 
+        self.selected_attribute = ""
+        self.selected_attribute_value = 0
+
         # for group_box_inventory
         self.inventory_slot_to_check = inventory_slot_to_check[:]
 
@@ -255,11 +258,12 @@ class Ui_MainWindow(object):
         self.btn_add_attr.setObjectName("btn_add_attr")
 
         self.combo_box_attributes = QtWidgets.QComboBox(self.group_box_attributes)
-        self.combo_box_attributes.setGeometry(QtCore.QRect(10, 45, 320, 21))
+        self.combo_box_attributes.setGeometry(QtCore.QRect(10, 45, 310, 21))
         self.combo_box_attributes.setObjectName("combo_box_attributes")
+        self.combo_box_attributes.activated.connect(self.on_combo_box_attributes_selected)
 
         self.double_spin_box_attributes = QtWidgets.QDoubleSpinBox(self.group_box_attributes)
-        self.double_spin_box_attributes.setGeometry(QtCore.QRect(340, 45, 40, 21))
+        self.double_spin_box_attributes.setGeometry(QtCore.QRect(330, 45, 50, 21))
         self.double_spin_box_attributes.setDecimals(1)
         self.double_spin_box_attributes.setSingleStep(0.1)
         self.double_spin_box_attributes.setMaximum(0)
@@ -270,7 +274,9 @@ class Ui_MainWindow(object):
         label.setText(_translate("MainWindow", text))
 
     def update_combo_box_items(self, combo_box):
-        # clean up box 
+        # clean up combo box and reset double spin box
+        self.selected_attribute = ""
+        self.selected_attribute_value = 0
         combo_box.clear()
 
         # only add attibutes to the box if an item is selected
@@ -279,6 +285,35 @@ class Ui_MainWindow(object):
             class_name = self.curr_class_full_text[self.curr_class[0]]
             for attr in ITEM_ATTR_LIST[item_name][class_name]:
                 combo_box.addItem(attr)
+            
+            # automatically set selected_attribute to first item in the combo box
+            self.selected_attribute = combo_box.itemText(0)
+            self.update_double_spin_box_attributes_properities(item_name, class_name)
+        else:
+            # if no item selected, reset double spin box
+            self.double_spin_box_attributes.setValue(0.0)
+            self.double_spin_box_attributes.setMaximum(0.0)
+
+    def on_combo_box_attributes_selected(self, index):
+        self.selected_attribute = self.combo_box_attributes.itemText(index)
+        item_name = self.curr_item_full_text[self.curr_item[0]]
+        class_name = self.curr_class_full_text[self.curr_class[0]]
+        self.update_double_spin_box_attributes_properities(item_name, class_name)
+
+    def update_double_spin_box_attributes_properities(self, item_name, class_name):
+        # if no attribute in combo box, reset double spin box
+        if not self.selected_attribute:
+            self.double_spin_box_attributes.setValue(0.0)
+            self.double_spin_box_attributes.setMaximum(0.0)
+            return
+
+        # find out data of selected attribute of current class and item
+        attr_data = ITEM_ATTR_LIST[item_name][class_name][self.selected_attribute]
+        max_value = 999 if attr_data["max_value"] == 0 else attr_data["max_value"]
+        self.double_spin_box_attributes.setSingleStep(attr_data["increment"])
+        self.double_spin_box_attributes.setValue(0.0)
+        self.double_spin_box_attributes.setMaximum(max_value)
+
 
     # - group_box_inventory -
     def add_group_box_inventory(self):
