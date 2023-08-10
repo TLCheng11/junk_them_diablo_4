@@ -96,26 +96,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_inventory.setSpacing(5)
         self.verticalLayout_inventory.setObjectName("verticalLayout_inventory")
 
-        # colums
-        self.horizontalLayout_inventory_row_1 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_inventory_row_1.setContentsMargins(0, -1, 0, 0)
-        self.horizontalLayout_inventory_row_1.setObjectName("horizontalLayout_inventory_row_1")
-        self.horizontalLayout_inventory_row_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_inventory_row_2.setContentsMargins(0, -1, 0, 0)
-        self.horizontalLayout_inventory_row_2.setObjectName("horizontalLayout_inventory_row_2")
-        self.horizontalLayout_inventory_row_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_inventory_row_3.setContentsMargins(0, -1, 0, 0)
-        self.horizontalLayout_inventory_row_3.setObjectName("horizontalLayout_inventory_row_3")
-
         # array to hold button objects
         self.inventory_btns = [[None] * 11 for _ in range(3)]
         for row in range(3):
-            if row == 0:
-                curr_row = self.horizontalLayout_inventory_row_1
-            elif row == 1:
-                curr_row = self.horizontalLayout_inventory_row_2
-            else:
-                curr_row = self.horizontalLayout_inventory_row_3
+            # create horizontal layout for each row
+            curr_row = QtWidgets.QHBoxLayout()
+            curr_row.setContentsMargins(0, -1, 0, 0)
+            curr_row.setSpacing(5)
+            curr_row.setObjectName("horizontalLayout_inventory_row_" + str(row + 1))
+
             for col in range(11):
                 self.inventory_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget)
                 curr_btn = self.inventory_btns[row][col]
