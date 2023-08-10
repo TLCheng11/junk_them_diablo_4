@@ -1,5 +1,6 @@
 # ignore this files
 venv/
 __pycache__/
-ui_test/
-test.ui
+ui_files/
+ui_python/
+*.ui

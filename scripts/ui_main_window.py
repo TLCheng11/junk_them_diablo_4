@@ -31,20 +31,19 @@ class Ui_MainWindow(object):
         # init class variables
         self.init_var()
 
+        # add central widget, menubar and status bar
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.add_menu_bar(MainWindow)
+        
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+
         # add widgets
         self.add_group_inventory()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
-
-        # add central widget, menubar and status bar
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -55,6 +54,31 @@ class Ui_MainWindow(object):
         self.inventory_slot_to_check = inventory_slot_to_check[:]
 
     # all functions for widgets
+
+    # menu
+    def add_menu_bar(self, MainWindow):
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setObjectName("menubar")
+        self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
+        MainWindow.setMenuBar(self.menubar)
+
+        self.menu_action_new = QtWidgets.QAction(MainWindow)
+        self.menu_action_new.setObjectName("menu_action_new")
+        self.menu_action_save = QtWidgets.QAction(MainWindow)
+        self.menu_action_save.setObjectName("menu_action_save")
+        self.menu_action_load = QtWidgets.QAction(MainWindow)
+        self.menu_action_load.setObjectName("menu_action_load")
+        self.menu_action_exit = QtWidgets.QAction(MainWindow)
+        self.menu_action_exit.setObjectName("menu_action_exit")
+
+        self.menuFile.addAction(self.menu_action_new)
+        self.menuFile.addAction(self.menu_action_save)
+        self.menuFile.addAction(self.menu_action_load)
+        self.menuFile.addAction(self.menu_action_exit)
+
+        self.menubar.addAction(self.menuFile.menuAction())
 
     # group_inventory
     # container
@@ -95,14 +119,7 @@ class Ui_MainWindow(object):
             for col in range(11):
                 self.inventory_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget)
                 curr_btn = self.inventory_btns[row][col]
-                # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-                # sizePolicy.setHorizontalStretch(0)
-                # sizePolicy.setVerticalStretch(0)
-                # sizePolicy.setHeightForWidth(curr_btn.sizePolicy().hasHeightForWidth())
-                # curr_btn.setSizePolicy(sizePolicy)
                 curr_btn.setMaximumSize(QtCore.QSize(30, 50))
-                # curr_btn.setCheckable(True)
-                # curr_btn.setChecked(False)
                 curr_btn.setObjectName("btn_inventory_" + str(row * 11 + col + 1).zfill(2))
                 if self.inventory_slot_to_check[row][col]:
                     curr_btn.setStyleSheet("background-color: green")
@@ -124,7 +141,6 @@ class Ui_MainWindow(object):
             else:
                 self.inventory_slot_to_check[row][col] = 1
                 curr_btn.setStyleSheet("background-color: green")
-            print(self.inventory_slot_to_check)
 
     # btn_start_scan
     def add_btn_start_scan(self):
@@ -154,12 +170,10 @@ class Ui_MainWindow(object):
         # self.shortcut_abort_scan.activated.connect(self.on_click_btn_abort_scan)
 
         # Register the Ctrl+A hotkey
-        keyboard.add_hotkey("ctrl+a", self.on_click_btn_abort_scan)
+        keyboard.add_hotkey("ctrl+x", self.on_click_btn_abort_scan)
 
     def on_click_btn_abort_scan(self):
-        print(self.scanning_inventory)
         self.scanning_inventory = False
-        print(self.scanning_inventory)
 
     # Unhook all hotkeys before closing the window
     def on_close_event(self, event):
@@ -170,13 +184,32 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+
+        # menu items
+        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.menu_action_new.setText(_translate("MainWindow", "New"))
+        self.menu_action_new.setStatusTip(_translate("MainWindow", "Create new file"))
+        self.menu_action_new.setShortcut(_translate("MainWindow", "Ctrl+N"))
+        self.menu_action_save.setText(_translate("MainWindow", "Save"))
+        self.menu_action_save.setStatusTip(_translate("MainWindow", "Save file"))
+        self.menu_action_save.setShortcut(_translate("MainWindow", "Ctrl+S"))
+        self.menu_action_load.setText(_translate("MainWindow", "Load"))
+        self.menu_action_load.setStatusTip(_translate("MainWindow", "Load file"))
+        self.menu_action_load.setShortcut(_translate("MainWindow", "Ctrl+L"))
+        self.menu_action_exit.setText(_translate("MainWindow", "Exit"))
+        self.menu_action_exit.setStatusTip(_translate("MainWindow", "Exit Progarm"))
+        self.menu_action_exit.setShortcut(_translate("MainWindow", "Ctrl+E"))
+
+        # inventory
         self.group_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
         for row in range(3):
             for col in range(11):
                 curr_num = str(row * 11 + col + 1).zfill(2)
                 self.inventory_btns[row][col].setText(_translate("MainWindow", curr_num))
+
+        # start / abort btn
         self.btn_start_scan.setText(_translate("MainWindow", "Start"))
-        self.btn_abort_scan.setText(_translate("MainWindow", "Abort Ctrl+A"))
+        self.btn_abort_scan.setText(_translate("MainWindow", "Abort Ctrl+x"))
 
 def open_ui():
     import sys
