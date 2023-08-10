@@ -46,6 +46,7 @@ class Ui_MainWindow(object):
         self.add_group_box_classes()
         self.add_group_box_inventory()
         self.add_group_box_attributes()
+        self.add_group_box_criterias()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
 
@@ -60,61 +61,61 @@ class Ui_MainWindow(object):
         # criterias for item scan
         self.criterias = {
             "Helm": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Chest": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Gloves": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Pants": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Boots": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Amulet": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Ring": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "One-Handed Weapon": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Two-Handed Weapon": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
             },
             "Off Hand": {
-                "match_needed": 3,
+                "matches_needed": 3,
                 "attributes_needed": {
 
                 },
@@ -434,6 +435,52 @@ class Ui_MainWindow(object):
                 self.inventory_slot_to_check[row][col] = 1
                 curr_btn.setStyleSheet("background-color: green")
 
+    # - group_box_criterias -
+    def add_group_box_criterias(self):
+        self.group_box_criterias = QtWidgets.QGroupBox(self.centralwidget)
+        self.group_box_criterias.setGeometry(QtCore.QRect(410, 20, 380, 480))
+        self.group_box_criterias.setObjectName("group_box_criterias")
+
+        self.tree_widget_criterias = QtWidgets.QTreeWidget(self.group_box_criterias)
+        self.tree_widget_criterias.setGeometry(QtCore.QRect(10, 20, 361, 451))
+        self.tree_widget_criterias.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.tree_widget_criterias.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.tree_widget_criterias.setObjectName("tree_widget_criterias")
+
+        __sortingEnabled = self.tree_widget_criterias.isSortingEnabled()
+
+        self.criterias_tree = {}
+
+        for item in self.criterias:
+            node = QtWidgets.QTreeWidgetItem(self.tree_widget_criterias)
+            self.criterias_tree[item] = {}
+            self.criterias_tree[item]["node"] = node
+            self.update_criterias_tree_text(node, item)
+            for key in self.criterias[item]:
+                child_node = QtWidgets.QTreeWidgetItem(node)
+                self.criterias_tree[item][key] = {}
+                self.criterias_tree[item][key]["node"] = child_node
+
+                if key == "matches_needed":
+                    self.update_criterias_tree_text(child_node, "Matches Needed", self.criterias[item][key])
+                elif key == "attributes_needed":
+                    self.update_criterias_tree_text(child_node, "Attributes Needed")
+                    
+                    for attr in self.criterias[item][key]:
+                        grandchild_node = QtWidgets.QTreeWidgetItem(child_node)
+                        self.criterias_tree[item][key][attr] = grandchild_node
+                        self.update_criterias_tree_text(grandchild_node, attr, self.criterias[item][key][attr], True)
+
+        self.tree_widget_criterias.setSortingEnabled(__sortingEnabled)
+
+    def update_criterias_tree_text(self, node, text, value=None, delete_btn=False):
+        _translate = QtCore.QCoreApplication.translate
+        node.setText(0, _translate("MainWindow", text))
+        if value:
+            node.setText(1, _translate("MainWindow", str(value)))
+        if delete_btn:
+            node.setText(1, _translate("MainWindow", x))
+
     # - start and abort btn -
     # btn_start_scan
     def add_btn_start_scan(self):
@@ -520,6 +567,12 @@ class Ui_MainWindow(object):
             for col in range(11):
                 curr_num = str(row * 11 + col + 1).zfill(2)
                 self.inventory_btns[row][col].setText(_translate("MainWindow", curr_num))
+
+        # criterias
+        self.group_box_criterias.setTitle(_translate("MainWindow", "Criterias"))
+        self.tree_widget_criterias.headerItem().setText(0, _translate("MainWindow", "Attr"))
+        self.tree_widget_criterias.headerItem().setText(1, _translate("MainWindow", "Value"))
+        self.tree_widget_criterias.headerItem().setText(2, _translate("MainWindow", "Delete"))
 
         # start / abort btn
         self.btn_start_scan.setText(_translate("MainWindow", "Start (Left Shift + X)"))
