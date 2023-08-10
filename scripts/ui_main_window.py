@@ -41,6 +41,7 @@ class Ui_MainWindow(object):
 
 
         # add widgets
+        self.add_groupBox_items()
         self.add_groupBox_inventory()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
@@ -52,6 +53,12 @@ class Ui_MainWindow(object):
     def init_var(self):
         self.scanning_inventory = False
         self.inventory_slot_to_check = inventory_slot_to_check[:]
+        self.items_names = [
+            ["Helm", "Chest", "Gloves", "Pants", "Boots"],
+            ["Amulet", "Ring", "1 Hand", "2 Hand", "Off H"],
+        ]
+        self.curr_item = ""
+        self.curr_class = ""
 
     # all functions for widgets
 
@@ -80,6 +87,42 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuFile.menuAction())
 
+    # groupBox_items
+    # container
+    def add_groupBox_items(self):
+        self.groupBox_items = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_items.setGeometry(QtCore.QRect(10, 10, 390, 140))
+        self.groupBox_items.setObjectName("groupBox_items")
+
+        self.verticalLayoutWidget_items = QtWidgets.QWidget(self.groupBox_items)
+        self.verticalLayoutWidget_items.setGeometry(QtCore.QRect(10, 15, 370, 120))
+        self.verticalLayoutWidget_items.setObjectName("verticalLayoutWidget_items")
+        self.verticalLayout_items = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_items)
+        self.verticalLayout_items.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_items.setObjectName("verticalLayout_items")
+
+        # array to hold button objects
+        self.items_btns = [[None] * 5 for _ in range(2)]
+
+        for row in range(2):
+            # create horizontal layout for each row
+            curr_row = QtWidgets.QHBoxLayout()
+            curr_row.setObjectName("horizontalLayout_items_row_" + str(row + 1))
+
+            for col in range(5):
+                self.items_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget_items)
+                curr_btn = self.items_btns[row][col]
+                curr_btn.setMaximumSize(QtCore.QSize(50, 50))
+                curr_btn.setObjectName("btn_items_" + self.items_names[row][col].replace(" ", "_"))
+                if self.items_names[row][col] == self.curr_item:
+                    curr_btn.setStyleSheet("background-color: green")
+                curr_btn.clicked.connect(self.on_click_btn_items)
+                curr_row.addWidget(curr_btn)
+            self.verticalLayout_items.addLayout(curr_row)
+
+    def on_click_btn_items(self):
+        pass
+
     # groupBox_inventory
     # container
     def add_groupBox_inventory(self):
@@ -88,10 +131,10 @@ class Ui_MainWindow(object):
         self.groupBox_inventory.setObjectName("groupBox_inventory")
 
         # rows
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.groupBox_inventory)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 10, 390, 170))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout_inventory = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayoutWidget_inventory = QtWidgets.QWidget(self.groupBox_inventory)
+        self.verticalLayoutWidget_inventory.setGeometry(QtCore.QRect(0, 10, 390, 170))
+        self.verticalLayoutWidget_inventory.setObjectName("verticalLayoutWidget_inventory")
+        self.verticalLayout_inventory = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_inventory)
         self.verticalLayout_inventory.setContentsMargins(5, 5, 5, 5)
         self.verticalLayout_inventory.setSpacing(5)
         self.verticalLayout_inventory.setObjectName("verticalLayout_inventory")
@@ -106,7 +149,7 @@ class Ui_MainWindow(object):
             curr_row.setObjectName("horizontalLayout_inventory_row_" + str(row + 1))
 
             for col in range(11):
-                self.inventory_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget)
+                self.inventory_btns[row][col] = QtWidgets.QPushButton(self.verticalLayoutWidget_inventory)
                 curr_btn = self.inventory_btns[row][col]
                 curr_btn.setMaximumSize(QtCore.QSize(30, 50))
                 curr_btn.setObjectName("btn_inventory_" + str(row * 11 + col + 1).zfill(2))
@@ -191,6 +234,12 @@ class Ui_MainWindow(object):
         self.menu_action_exit.setText(_translate("MainWindow", "Exit"))
         self.menu_action_exit.setStatusTip(_translate("MainWindow", "Exit Progarm"))
         self.menu_action_exit.setShortcut(_translate("MainWindow", "Ctrl+E"))
+
+        # items
+        self.groupBox_items.setTitle(_translate("MainWindow", "Items"))
+        for row in range(len(self.items_btns)):
+            for col in range(len(self.items_btns[row])):
+                self.items_btns[row][col].setText(_translate("MainWindow", self.items_names[row][col]))
 
         # inventory
         self.groupBox_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
