@@ -44,6 +44,7 @@ class Ui_MainWindow(object):
         self.add_groupBox_items()
         self.add_groupBox_classes()
         self.add_groupBox_inventory()
+        self.add_groupBox_attributes()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
 
@@ -66,11 +67,34 @@ class Ui_MainWindow(object):
         self.classes_names = ["All", "Barb", "Druid", "Necro", "Rogue", "Sorc"]
         self.curr_class = ("All", 0)
 
+        # for groupBox_attributes
+        self.curr_item_full_text = {
+            "": "Please select an item above",
+            "Helm": "Helm",
+            "Chest": "Chest",
+            "Gloves": "Gloves",
+            "Pants": "Pants",
+            "Boots": "Boots",
+            "Amulet": "Amulet",
+            "Ring": "Ring",
+            "1-Hand": "One-Handed Weapon",
+            "2-Hand": "Two-Handed Weapon",
+            "Off-Hand": "Off Hand",
+        }
+
+        self.curr_class_full_text = {
+            "All": "All Classes",
+            "Barb": "Barbarian",
+            "Druid": "Druid",
+            "Necro": "Necromancer",
+            "Rogue": "Rogue",
+            "Sorc": "Sorcerer",
+        }
+
         # for groupBox_inventory
         self.inventory_slot_to_check = inventory_slot_to_check[:]
 
     # ----- all functions for widgets -----
-
     # - menu -
     def add_menu_bar(self, MainWindow):
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -205,6 +229,35 @@ class Ui_MainWindow(object):
                 curr_btn.setStyleSheet("border: 2px solid yellow")
                 self.curr_class = (class_name, idx)
 
+    # - groupBox_attributes -
+    def add_groupBox_attributes(self):
+        self.groupBox_attributes = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_attributes.setGeometry(QtCore.QRect(10, 270, 390, 80))
+        self.groupBox_attributes.setObjectName("groupBox_attributes")
+
+        self.label_curr_item = QtWidgets.QLabel(self.groupBox_attributes)
+        self.label_curr_item.setGeometry(QtCore.QRect(10, 22, 170, 16))
+        self.label_curr_item.setObjectName("label_curr_item")
+
+        self.label_curr_class = QtWidgets.QLabel(self.groupBox_attributes)
+        self.label_curr_class.setGeometry(QtCore.QRect(190, 22, 100, 16))
+        self.label_curr_class.setObjectName("label_curr_class")
+
+        self.btn_add_attr = QtWidgets.QPushButton(self.groupBox_attributes)
+        self.btn_add_attr.setGeometry(QtCore.QRect(305, 20, 75, 20))
+        self.btn_add_attr.setObjectName("btn_add_attr")
+
+        self.comboBox_attributes = QtWidgets.QComboBox(self.groupBox_attributes)
+        self.comboBox_attributes.setGeometry(QtCore.QRect(10, 45, 320, 21))
+        self.comboBox_attributes.setObjectName("comboBox_attributes")
+
+        self.doubleSpinBox_attributes = QtWidgets.QDoubleSpinBox(self.groupBox_attributes)
+        self.doubleSpinBox_attributes.setGeometry(QtCore.QRect(340, 45, 40, 21))
+        self.doubleSpinBox_attributes.setDecimals(1)
+        self.doubleSpinBox_attributes.setSingleStep(0.1)
+        self.doubleSpinBox_attributes.setMaximum(0)
+        self.doubleSpinBox_attributes.setObjectName("doubleSpinBox_attributes")
+
     # - groupBox_inventory -
     def add_groupBox_inventory(self):
         self.groupBox_inventory = QtWidgets.QGroupBox(self.centralwidget)
@@ -328,6 +381,12 @@ class Ui_MainWindow(object):
         self.groupBox_classes.setTitle(_translate("MainWindow", "Classes"))
         for col in range(len(self.classes_btns)):
             self.classes_btns[col].setText(_translate("MainWindow", self.classes_names[col]))
+
+        # attributes
+        self.groupBox_attributes.setTitle(_translate("MainWindow", "Attributes"))
+        self.label_curr_item.setText(_translate("MainWindow", self.curr_item_full_text[self.curr_item[0]]))
+        self.label_curr_class.setText(_translate("MainWindow", self.curr_class_full_text[self.curr_class[0]]))
+        self.btn_add_attr.setText(_translate("MainWindow", "Add Attr"))
 
         # inventory
         self.groupBox_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
