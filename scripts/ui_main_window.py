@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
 
 
         # add widgets
-        self.add_group_inventory()
+        self.add_groupBox_inventory()
         self.add_btn_start_scan()
         self.add_btn_abort_scan()
 
@@ -80,15 +80,15 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuFile.menuAction())
 
-    # group_inventory
+    # groupBox_inventory
     # container
-    def add_group_inventory(self):
-        self.group_inventory = QtWidgets.QGroupBox(self.centralwidget)
-        self.group_inventory.setGeometry(QtCore.QRect(10, 370, 390, 180))
-        self.group_inventory.setObjectName("group_inventory")
+    def add_groupBox_inventory(self):
+        self.groupBox_inventory = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_inventory.setGeometry(QtCore.QRect(10, 370, 390, 180))
+        self.groupBox_inventory.setObjectName("groupBox_inventory")
 
         # rows
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.group_inventory)
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.groupBox_inventory)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 10, 390, 170))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout_inventory = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
@@ -201,7 +201,7 @@ class Ui_MainWindow(object):
         self.menu_action_exit.setShortcut(_translate("MainWindow", "Ctrl+E"))
 
         # inventory
-        self.group_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
+        self.groupBox_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
         for row in range(3):
             for col in range(11):
                 curr_num = str(row * 11 + col + 1).zfill(2)
