@@ -3,6 +3,7 @@ import pyautogui
 import keyboard
 import threading
 
+from item_attr_list import ITEM_ATTR_LIST
 from items_scaner import start_scan
 
 inventory_slot_to_check = [
@@ -177,6 +178,7 @@ class Ui_MainWindow(object):
                 self.curr_item = (item_name, row, col)
 
             self.update_label_text(self.label_curr_item, self.curr_item_full_text[self.curr_item[0]])
+            self.update_comboBox_items(self.comboBox_attributes)
 
     # - groupBox_classes -
     def add_groupBox_classes(self):
@@ -232,6 +234,7 @@ class Ui_MainWindow(object):
                 self.curr_class = (class_name, idx)
             
             self.update_label_text(self.label_curr_class, self.curr_class_full_text[self.curr_class[0]])
+            self.update_comboBox_items(self.comboBox_attributes)
 
     # - groupBox_attributes -
     def add_groupBox_attributes(self):
@@ -265,6 +268,17 @@ class Ui_MainWindow(object):
     def update_label_text(self, label, text):
         _translate = QtCore.QCoreApplication.translate
         label.setText(_translate("MainWindow", text))
+
+    def update_comboBox_items(self, comboBox):
+        # clean up box 
+        comboBox.clear()
+
+        # only add attibutes to the box if an item is selected
+        if self.curr_item[0]:
+            item_name = self.curr_item_full_text[self.curr_item[0]]
+            class_name = self.curr_class_full_text[self.curr_class[0]]
+            for attr in ITEM_ATTR_LIST[item_name][class_name]:
+                comboBox.addItem(attr)
 
     # - groupBox_inventory -
     def add_groupBox_inventory(self):
