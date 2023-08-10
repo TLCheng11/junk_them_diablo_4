@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
 
         # for groupBox_classes
         self.classes_names = ["All", "Barb", "Druid", "Necro", "Rogue", "Sorc"]
-        self.curr_class = ("", -1)
+        self.curr_class = ("All", 0)
 
         # for groupBox_inventory
         self.inventory_slot_to_check = inventory_slot_to_check[:]
@@ -179,7 +179,31 @@ class Ui_MainWindow(object):
             self.horizontalLayout_classes.addWidget(curr_btn)
 
     def on_click_btn_classes(self):
-        pass
+        curr_btn = self.centralwidget.sender()
+        if curr_btn:
+            class_name = curr_btn.text()
+
+            # if the btn was selected before, change its color to deflaut, clear curr_item
+            if class_name == self.curr_class[0]:
+                # don't need to do anything if all is selected again
+                if class_name == "All":
+                    return
+                curr_btn.setStyleSheet("")
+
+                # set selected item to All as default
+                self.classes_btns[0].setStyleSheet("border: 2px solid yellow")
+                self.curr_class = ("All", 0)
+            else:
+                # find the index of the btn
+                idx = self.classes_names.index(class_name)
+
+                # if other items was selected before, reset color of previous btn to deflaut
+                last_class_btn = self.classes_btns[self.curr_class[1]]
+                last_class_btn.setStyleSheet("")
+                
+                # set curr_class to the item of the btn and change btn color to green
+                curr_btn.setStyleSheet("border: 2px solid yellow")
+                self.curr_class = (class_name, idx)
 
     # - groupBox_inventory -
     def add_groupBox_inventory(self):
