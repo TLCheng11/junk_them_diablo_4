@@ -191,6 +191,7 @@ class Ui_MainWindow(object):
         self.menu_action_load.triggered.connect(self.load_data)
         self.menu_action_exit = QtWidgets.QAction(MainWindow)
         self.menu_action_exit.setObjectName("menu_action_exit")
+        self.menu_action_exit.triggered.connect(self.exit_application)
 
         self.menu_file.addAction(self.menu_action_new)
         self.menu_file.addAction(self.menu_action_save)
@@ -238,6 +239,9 @@ class Ui_MainWindow(object):
                     print(e)
                     error_message = "An error occurred while loading the file!"
                     QtWidgets.QMessageBox.critical(self.centralwidget, "Error", error_message)
+    
+    def exit_application(self):
+        QtWidgets.QApplication.quit()
 
     # - group_box_items -
     def add_group_box_items(self):
@@ -629,7 +633,7 @@ class Ui_MainWindow(object):
     def on_close_event(self, event):
         keyboard.unhook_all()
         event.accept()
-    
+        
     # retranslateUi
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
