@@ -183,6 +183,7 @@ class Ui_MainWindow(object):
 
         self.menu_action_new = QtWidgets.QAction(MainWindow)
         self.menu_action_new.setObjectName("menu_action_new")
+        self.menu_action_new.triggered.connect(self.reset_ui_data)
         self.menu_action_save = QtWidgets.QAction(MainWindow)
         self.menu_action_save.setObjectName("menu_action_save")
         self.menu_action_save.triggered.connect(self.save_data)
@@ -199,6 +200,69 @@ class Ui_MainWindow(object):
         self.menu_file.addAction(self.menu_action_exit)
 
         self.menubar.addAction(self.menu_file.menuAction())
+
+    def reset_ui_data(self):
+        new_inventory_slot_to_check = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ]
+
+        new_criterias = {
+            "Helm": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Chest": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Gloves": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Pants": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Boots": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Amulet": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Ring": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "One-Handed Weapon": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Two-Handed Weapon": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Off Hand": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+            "Shield": {
+                "Matches Needed": 3,
+                "Attributes Needed": {},
+            },
+        }
+
+        new_criterias_tree = {}
+
+        self.inventory_slot_to_check = new_inventory_slot_to_check
+        self.criterias = new_criterias
+        self.criterias_tree = new_criterias_tree
+
+        self.load_data_to_group_box_inventory(self.inventory_slot_to_check)
+        self.load_data_to_group_box_criterias(self.criterias_tree, self.criterias)
 
     def save_data(self):
         data = {
@@ -241,6 +305,8 @@ class Ui_MainWindow(object):
                     QtWidgets.QMessageBox.critical(self.centralwidget, "Error", error_message)
     
     def exit_application(self):
+        keyboard.unhook_all()
+        self.save_before_exit()
         QtWidgets.QApplication.quit()
 
     # - group_box_items -
@@ -632,8 +698,19 @@ class Ui_MainWindow(object):
     # Unhook all hotkeys before closing the window
     def on_close_event(self, event):
         keyboard.unhook_all()
+        self.save_before_exit()
         event.accept()
-        
+
+    def save_before_exit(self):
+        print("saving last used data")
+        data = {
+            "inventory_slot_to_check": self.inventory_slot_to_check,
+            "criterias": self.criterias
+        }
+
+        with open("saved_criterias\last_used_criterias.json", "w") as json_file:
+            json.dump(data, json_file, indent=4)
+
     # retranslateUi
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
