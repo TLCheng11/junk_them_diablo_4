@@ -120,12 +120,18 @@ class Ui_MainWindow(object):
 
                 },
             },
+            "Shield": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
+
+                },
+            },
         }
 
         # for group_box_items
         self.items_names = [
             ["Helm", "Chest", "Gloves", "Pants", "Boots"],
-            ["Amulet", "Ring", "1-Hand", "2-Hand", "Off-H"],
+            ["Amulet", "Ring", "1-Hand", "2-Hand", "Off-H", "Shield"],
         ]
         self.curr_item = ("", -1, -1)
 
@@ -146,6 +152,7 @@ class Ui_MainWindow(object):
             "1-Hand": "One-Handed Weapon",
             "2-Hand": "Two-Handed Weapon",
             "Off-H": "Off Hand",
+            "Shield": "Shield"
         }
 
         self.curr_class_full_text = {
@@ -203,14 +210,14 @@ class Ui_MainWindow(object):
         self.vertical_layout_items.setObjectName("vertical_layout_items")
 
         # array to hold button objects
-        self.items_btns = [[None] * 5 for _ in range(2)]
+        self.items_btns = [[None] * len(self.items_names[i]) for i in range(len(self.items_names))]
 
-        for row in range(2):
+        for row in range(len(self.items_btns)):
             # create horizontal layout for each row
             curr_row = QtWidgets.QHBoxLayout()
             curr_row.setObjectName("horizontal_layout_items_row_" + str(row + 1))
 
-            for col in range(5):
+            for col in range(len(self.items_btns[row])):
                 self.items_btns[row][col] = QtWidgets.QPushButton(self.vertical_layout_widget_items)
                 curr_btn = self.items_btns[row][col]
                 curr_btn.setMaximumSize(QtCore.QSize(50, 50))
@@ -235,6 +242,9 @@ class Ui_MainWindow(object):
                 idx = (self.items_names[0] + self.items_names[1]).index(item_name)
                 row = idx // 5
                 col = idx % 5
+                if row == 2:
+                    row = 1
+                    col = 5
 
                 # if other items was selected before, reset color of previous btn to deflaut
                 if self.curr_item[0]:
