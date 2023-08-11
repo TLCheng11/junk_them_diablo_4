@@ -221,14 +221,16 @@ class Ui_MainWindow(object):
                 temp_criterias = data.get("criterias")
 
 
-                self.reset_group_box_inventory(temp_inventory)
 
                 try:
-                    pass
+                    self.reset_group_box_inventory(temp_inventory)
                     self.inventory_slot_to_check = data.get("inventory_slot_to_check")
                     print("Data loaded from file:")
-                except:
+                except Exception as e:
                     self.reset_group_box_inventory(self.inventory_slot_to_check)
+                    print(e)
+                    error_message = "An error occurred while loading the file!"
+                    QtWidgets.QMessageBox.critical(self.centralwidget, "Error", error_message)
 
     # - group_box_items -
     def add_group_box_items(self):
