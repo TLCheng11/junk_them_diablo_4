@@ -223,11 +223,11 @@ class Ui_MainWindow(object):
 
 
                 try:
-                    self.reset_group_box_inventory(temp_inventory)
+                    self.load_data_to_group_box_inventory(temp_inventory)
                     self.inventory_slot_to_check = data.get("inventory_slot_to_check")
                     print("Data loaded from file:")
                 except Exception as e:
-                    self.reset_group_box_inventory(self.inventory_slot_to_check)
+                    self.load_data_to_group_box_inventory(self.inventory_slot_to_check)
                     print(e)
                     error_message = "An error occurred while loading the file!"
                     QtWidgets.QMessageBox.critical(self.centralwidget, "Error", error_message)
@@ -483,7 +483,7 @@ class Ui_MainWindow(object):
                 self.inventory_slot_to_check[row][col] = 1
                 curr_btn.setStyleSheet("background-color: green")
 
-    def reset_group_box_inventory(self, temp_inventory):
+    def load_data_to_group_box_inventory(self, temp_inventory):
         for row in range(len(temp_inventory)):
             for col in range(len(temp_inventory[row])):
                 curr_btn = self.inventory_btns[row][col]
@@ -510,26 +510,35 @@ class Ui_MainWindow(object):
 
         # variable to hold all the tree node
         self.criterias_tree = {}
+        self.load_data_to_group_box_criterias(self.criterias_tree, self.criterias)
 
-        for item in self.criterias:
+    def load_data_to_group_box_criterias(self, criterias_tree, criterias):
+        # make sure tree is clean
+        self.tree_widget_criterias.clear()
+
+        # create level 1 node
+        for item in criterias:
             node = QtWidgets.QTreeWidgetItem(self.tree_widget_criterias)
-            self.criterias_tree[item] = {}
-            self.criterias_tree[item]["node"] = node
+            # save access point for level 1 node
+            criterias_tree[item] = {}
+            criterias_tree[item]["node"] = node
             self.update_criterias_tree_text(node, item)
-            for key in self.criterias[item]:
+            # create level 2 node
+            for key in criterias[item]:
                 child_node = QtWidgets.QTreeWidgetItem(node)
-                self.criterias_tree[item][key] = {}
-                self.criterias_tree[item][key]["node"] = child_node
+                criterias_tree[item][key] = {}
+                # save access point for leve 2 node
+                criterias_tree[item][key]["node"] = child_node
 
                 if key == "Matches Needed":
-                    self.update_criterias_tree_text(child_node, key, self.criterias[item][key])
+                    self.update_criterias_tree_text(child_node, key, criterias[item][key])
                 elif key == "Attributes Needed":
                     self.update_criterias_tree_text(child_node, key)
-                    
-                    for attr in self.criterias[item][key]:
+                    # create level 3 node
+                    for attr in criterias[item][key]:
                         grandchild_node = QtWidgets.QTreeWidgetItem(child_node)
-                        self.criterias_tree[item][key][attr] = grandchild_node
-                        self.update_criterias_tree_text(grandchild_node, attr, self.criterias[item][key][attr], True)
+                        criterias_tree[item][key][attr] = grandchild_node
+                        self.update_criterias_tree_text(grandchild_node, attr, criterias[item][key][attr], True)
 
     def update_criterias_tree_text(self, node, text, value=None, delete_btn=False):
         _translate = QtCore.QCoreApplication.translate
