@@ -4,3 +4,4 @@ __pycache__/
 ui_files/
 ui_python/
 *.ui
+saved_criterias/*

@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import pyautogui
 import keyboard
 import threading
+import json
 
 from item_attr_list import ITEM_ATTR_LIST
 from items_scaner import start_scan
@@ -184,6 +185,7 @@ class Ui_MainWindow(object):
         self.menu_action_new.setObjectName("menu_action_new")
         self.menu_action_save = QtWidgets.QAction(MainWindow)
         self.menu_action_save.setObjectName("menu_action_save")
+        self.menu_action_save.triggered.connect(self.save_data)
         self.menu_action_load = QtWidgets.QAction(MainWindow)
         self.menu_action_load.setObjectName("menu_action_load")
         self.menu_action_exit = QtWidgets.QAction(MainWindow)
@@ -195,6 +197,18 @@ class Ui_MainWindow(object):
         self.menu_file.addAction(self.menu_action_exit)
 
         self.menubar.addAction(self.menu_file.menuAction())
+
+    def save_data(self):
+        data = {
+            "inventory_slot_to_check": self.inventory_slot_to_check,
+            "criterias": self.criterias
+        }
+
+        default_path = "saved_criterias/"
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.centralwidget, "Save File", default_path, "JSON Files (*.json)")
+        if filename:
+            with open(filename, "w") as f:
+                json.dump(data, f, indent=4)
 
     # - group_box_items -
     def add_group_box_items(self):
