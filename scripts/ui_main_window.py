@@ -217,17 +217,24 @@ class Ui_MainWindow(object):
         if filename:
             with open(filename, "r") as f:
                 data = json.load(f)
-                temp_inventory = data.get("inventory_slot_to_check")
-                temp_criterias = data.get("criterias")
-
-
 
                 try:
+                    # create temp variable to hold an copy data in case of invalid data input
+                    temp_inventory = data.get("inventory_slot_to_check")
+                    temp_criterias = data.get("criterias")
+                    temp_criterias_tree = {}
+
+                    # these two operation might return errow with invalid data
                     self.load_data_to_group_box_inventory(temp_inventory)
-                    self.inventory_slot_to_check = data.get("inventory_slot_to_check")
+                    self.load_data_to_group_box_criterias(temp_criterias_tree, temp_criterias)
+
+                    self.inventory_slot_to_check = temp_inventory
+                    self.criterias_tree = temp_criterias_tree
+                    self.criterias = temp_criterias
                     print("Data loaded from file:")
                 except Exception as e:
                     self.load_data_to_group_box_inventory(self.inventory_slot_to_check)
+                    self.load_data_to_group_box_criterias(self.criterias_tree, self.criterias)
                     print(e)
                     error_message = "An error occurred while loading the file!"
                     QtWidgets.QMessageBox.critical(self.centralwidget, "Error", error_message)
@@ -487,10 +494,12 @@ class Ui_MainWindow(object):
         for row in range(len(temp_inventory)):
             for col in range(len(temp_inventory[row])):
                 curr_btn = self.inventory_btns[row][col]
-                if temp_inventory[row][col]:
+                if temp_inventory[row][col] == 1:
                     curr_btn.setStyleSheet("background-color: green")
-                else:
+                elif temp_inventory[row][col] == 0:
                     curr_btn.setStyleSheet("background-color: red")
+                else:
+                    raise RuntimeError("Error: inventory data must only contain 0 or 1")
 
     # - group_box_criterias -
     def add_group_box_criterias(self):
@@ -539,6 +548,8 @@ class Ui_MainWindow(object):
                         grandchild_node = QtWidgets.QTreeWidgetItem(child_node)
                         criterias_tree[item][key][attr] = grandchild_node
                         self.update_criterias_tree_text(grandchild_node, attr, criterias[item][key][attr], True)
+                else:
+                    raise RuntimeError("Error: Invalid key in criterias")
 
     def update_criterias_tree_text(self, node, text, value=None, delete_btn=False):
         _translate = QtCore.QCoreApplication.translate
