@@ -559,7 +559,7 @@ class Ui_MainWindow(object):
 
     def start_scan_thread(self):
         window_size = pyautogui.size()
-        start_scan(window_size, self.inventory_slot_to_check, self)
+        start_scan(window_size, self.inventory_slot_to_check, self.criterias, self)
 
     # btn_abort_scan
     def add_btn_abort_scan(self):
@@ -590,8 +590,8 @@ class Ui_MainWindow(object):
             "criterias": self.criterias
         }
 
-        with open("saved_criterias\last_used_criterias.json", "w") as json_file:
-            json.dump(data, json_file, indent=4)
+        with open("saved_criterias\last_used_criterias.json", "w") as f:
+            json.dump(data, f, indent=4)
 
     # retranslateUi
     def retranslateUi(self, MainWindow):

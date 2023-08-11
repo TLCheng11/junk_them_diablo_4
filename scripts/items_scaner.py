@@ -6,11 +6,11 @@ import random
 import time
 import re
 
-from base_criterias import CRITERIAS, ALL_GEAR_TYPES, WEAPONS_LIST
+from base_criterias import ALL_GEAR_TYPES, WEAPONS_LIST
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-def start_scan(window_size, inventory_slot_to_check, ui, x=1295, y=760):
+def start_scan(window_size, inventory_slot_to_check, criterias, ui, x=1295, y=760):
     # convert start position and inventory dimension with game window resolution
     x = 1920 * x / window_size.width
     y = 1080 * y / window_size.height
@@ -56,7 +56,7 @@ def start_scan(window_size, inventory_slot_to_check, ui, x=1295, y=760):
                 item_data = clean_data(item_data)
                 time.sleep(0.01 + time_lag)
 
-                if not check_criteria(CRITERIAS, item_data):
+                if not check_criterias(criterias, item_data):
                     # mark item as junk
                     time.sleep(0.01 + time_lag)
                     pyautogui.press("space")
@@ -113,7 +113,7 @@ def clean_data(input_data):
     
     return cleaned_string
 
-def check_criteria(criteria, item_data, player_class="Rogue"):
+def check_criterias(criterias, item_data, player_class="Rogue"):
     # if already marked as junk, skip
     if check_marked_as_junk(item_data):
         return True
@@ -127,29 +127,18 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
         return True
 
     print(item_data)
+
     # check the gear type
     (gear_type, cutoff_index) = check_gear_type(item_data)
     if gear_type == "":
         return True
 
-    class_criteria = criteria[player_class]
-            
-    #check item tier:
-    tier_needed = False
-    for tier in criteria["Item_teir_to_keep"]:
-        if tier in item_data or tier == "Normal":
-            tier_needed = True
-            break
-
-    if not tier_needed:
-        return False
-
     # further trim the data to avoid weapon inherited attr
     trimmed_item_data = item_data[cutoff_index:]
-    match_needed = class_criteria[gear_type]["match_needed"]
+    matches_needed = criterias[gear_type]["Matches Needed"]
 
     # start comparing
-    for attr in class_criteria[gear_type]["attributes_needed"]:
+    for attr in criterias[gear_type]["Attributes Needed"]:
 
         # convert [X]% in gloves and ring and weapon into regex
         attr.replace("[X]%", "[\[\d.\]%]+")
@@ -157,10 +146,10 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
 
         pattern = re.compile(rf'([\d.]+)[%\s]*{attr}(?! [a-zA-Z])')
         match = re.search(pattern, trimmed_item_data)
-        if match and float(match.group(1)) >= class_criteria[gear_type]["attributes_needed"][attr]:
-            match_needed -= 1
-            print("+" + match.group(1), attr, " | match needed:", match_needed)
-        if match_needed == 0:
+        if match and float(match.group(1)) >= criterias[gear_type]["Attributes Needed"][attr]:
+            matches_needed -= 1
+            print("+" + match.group(1), attr, " | matches needed:", matches_needed)
+        if matches_needed == 0:
             return True
 
     print("===" * 10)
@@ -178,14 +167,14 @@ def check_gear_type(item_data):
             try:
                 if gear_type in WEAPONS_LIST:
                     # find the data index after the inherited attr
-                    weapon_inherited_attr = WEAPONS_LIST[gear_type]
+                    (weapon_inherited_attr, weapon_type) = WEAPONS_LIST[gear_type]
                     pattern = rf'([\d.]+)[%\s]*({weapon_inherited_attr})'
                     match = re.search(pattern, item_data)
                     last_index = match.end(2)
                     # print(weapon_inherited_attr)
                     # print(match.group(1))
                     # print(item_data[last_index:])
-                    return ("Weapon", last_index)
+                    return (weapon_type, last_index)
                 else:
                     # if it is not a weapon, find the data index after the gear word
                     pattern = rf'({gear_type})'

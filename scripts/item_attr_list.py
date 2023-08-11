@@ -220,6 +220,7 @@ ITEM_ATTR_LIST = {
             "Damage Reduction": {"increment": 0.1, "max_value": 0 },
             "Damage Reduction from Close Enemies": {"increment": 0.1, "max_value": 0 },
             "Damage Reduction from Distant Enemies": {"increment": 0.1, "max_value": 0 },
+            "Damage Reduction while Injured": {"increment": 0.1, "max_value": 0 },
             "Dexterity": {"increment": 1, "max_value": 0 },
             "Dodge Chance": {"increment": 0.1, "max_value": 0 },
             "Dodge Chance Against Close Enemies": {"increment": 0.1, "max_value": 0 },
