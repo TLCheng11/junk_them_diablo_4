@@ -453,6 +453,7 @@ class Ui_MainWindow(object):
         self.tree_widget_criterias.header().setDefaultSectionSize(30)
         self.tree_widget_criterias.setColumnWidth(0, 260)
 
+        # variable to hold all the tree node
         self.criterias_tree = {}
 
         for item in self.criterias:
@@ -481,7 +482,13 @@ class Ui_MainWindow(object):
         if value:
             node.setText(1, _translate("MainWindow", str(value)))
         if delete_btn:
-            node.setText(2, _translate("MainWindow", "x"))
+            # node.setText(2, _translate("MainWindow", "x"))
+            button = QtWidgets.QPushButton("X")
+            button.setFixedSize(20, 20)
+            button.setStyleSheet("QPushButton { text-align: center; }")
+            button.clicked.connect(lambda: self.on_click_delete_tree_item(node))
+            self.tree_widget_criterias.setItemWidget(node, 2, button)
+            node.setTextAlignment(2, QtCore.Qt.AlignCenter)
 
     def add_node_to_criterias_tree(self, item_name, value):
         parent = self.criterias_tree[item_name]["Attributes Needed"]["node"]
@@ -492,6 +499,18 @@ class Ui_MainWindow(object):
             self.criterias_tree[item_name]["Attributes Needed"][self.selected_attribute] = QtWidgets.QTreeWidgetItem(parent)
         node = self.criterias_tree[item_name]["Attributes Needed"][self.selected_attribute]
         self.update_criterias_tree_text(node, self.selected_attribute, value, True)
+
+    def on_click_delete_tree_item(self, node):
+        # find parent and the path in criterias
+        parent = node.parent()
+        item = parent.parent().text(0)
+        key = parent.text(0)
+        attr = node.text(0)
+        
+        # remove the attr from criterias and the node from the tree and the widget
+        self.criterias[item][key].pop(attr)
+        self.criterias_tree[item][key].pop(attr)
+        parent.removeChild(node)
 
     # - start and abort btn -
     # btn_start_scan

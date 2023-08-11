@@ -115,6 +115,26 @@ ITEM_ATTR_LIST = {
 
         },
     },
+    "Boots": {
+        "All Classes": {
+
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
+    },
     "Amulet": {
         "All Classes": {
 
