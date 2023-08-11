@@ -53,7 +53,7 @@ ITEM_ATTR_LIST = {
             "Ranks of Hydra": {"increment": 1, "max_value": 3 },
             "Ranks of Ice Blades": {"increment": 1, "max_value": 3 },
             "Ranks of Lightning Spear": {"increment": 1, "max_value": 3 },
-        }
+        },
     },
     "Chest": {
         "All Classes": {
@@ -73,27 +73,146 @@ ITEM_ATTR_LIST = {
         },
         "Sorcerer": {
 
-        }
+        },
     },
     "Gloves": {
+        "All Classes": {
 
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
     },
     "Pants": {
+        "All Classes": {
 
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
     },
     "Amulet": {
+        "All Classes": {
 
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
     },
     "Ring": {
+        "All Classes": {
 
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
     },
     "One-Handed Weapon": {
+        "All Classes": {
 
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
     },
     "Two-Handed Weapon": {
+        "All Classes": {
 
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
     },
     "Off Hand": {
+        "All Classes": {
 
+        },
+        "Barbarian": {
+
+        },
+        "Druid": {
+
+        },
+        "Necromancer": {
+
+        },
+        "Rogue": {
+
+        },
+        "Sorcerer": {
+
+        },
     },
 }

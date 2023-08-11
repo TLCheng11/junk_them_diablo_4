@@ -61,62 +61,62 @@ class Ui_MainWindow(object):
         # criterias for item scan
         self.criterias = {
             "Helm": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Chest": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Gloves": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Pants": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Boots": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Amulet": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Ring": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "One-Handed Weapon": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Two-Handed Weapon": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
             "Off Hand": {
-                "matches_needed": 3,
-                "attributes_needed": {
+                "Matches Needed": 3,
+                "Attributes Needed": {
 
                 },
             },
@@ -383,7 +383,9 @@ class Ui_MainWindow(object):
     def on_click_btn_add_attr(self):
         if self.selected_attribute:
             item_name = self.curr_item_full_text[self.curr_item[0]]
-            self.criterias[item_name]["attributes_needed"][self.selected_attribute] = round(self.double_spin_box_attributes.value(), 1)
+            value = round(self.double_spin_box_attributes.value(), 1)
+            self.criterias[item_name]["Attributes Needed"][self.selected_attribute] = value
+            self.add_node_to_criterias_tree(item_name, value)
 
     # - group_box_inventory -
     def add_group_box_inventory(self):
@@ -442,12 +444,14 @@ class Ui_MainWindow(object):
         self.group_box_criterias.setObjectName("group_box_criterias")
 
         self.tree_widget_criterias = QtWidgets.QTreeWidget(self.group_box_criterias)
-        self.tree_widget_criterias.setGeometry(QtCore.QRect(10, 20, 361, 451))
+        self.tree_widget_criterias.setGeometry(QtCore.QRect(10, 20, 360, 450))
         self.tree_widget_criterias.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.tree_widget_criterias.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tree_widget_criterias.setObjectName("tree_widget_criterias")
+        self.tree_widget_criterias.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
-        __sortingEnabled = self.tree_widget_criterias.isSortingEnabled()
+        self.tree_widget_criterias.header().setDefaultSectionSize(30)
+        self.tree_widget_criterias.setColumnWidth(0, 260)
 
         self.criterias_tree = {}
 
@@ -461,17 +465,15 @@ class Ui_MainWindow(object):
                 self.criterias_tree[item][key] = {}
                 self.criterias_tree[item][key]["node"] = child_node
 
-                if key == "matches_needed":
-                    self.update_criterias_tree_text(child_node, "Matches Needed", self.criterias[item][key])
-                elif key == "attributes_needed":
-                    self.update_criterias_tree_text(child_node, "Attributes Needed")
+                if key == "Matches Needed":
+                    self.update_criterias_tree_text(child_node, key, self.criterias[item][key])
+                elif key == "Attributes Needed":
+                    self.update_criterias_tree_text(child_node, key)
                     
                     for attr in self.criterias[item][key]:
                         grandchild_node = QtWidgets.QTreeWidgetItem(child_node)
                         self.criterias_tree[item][key][attr] = grandchild_node
                         self.update_criterias_tree_text(grandchild_node, attr, self.criterias[item][key][attr], True)
-
-        self.tree_widget_criterias.setSortingEnabled(__sortingEnabled)
 
     def update_criterias_tree_text(self, node, text, value=None, delete_btn=False):
         _translate = QtCore.QCoreApplication.translate
@@ -479,7 +481,17 @@ class Ui_MainWindow(object):
         if value:
             node.setText(1, _translate("MainWindow", str(value)))
         if delete_btn:
-            node.setText(1, _translate("MainWindow", x))
+            node.setText(2, _translate("MainWindow", "x"))
+
+    def add_node_to_criterias_tree(self, item_name, value):
+        parent = self.criterias_tree[item_name]["Attributes Needed"]["node"]
+        parent.setExpanded(True)
+        parent.parent().setExpanded(True)
+        # if selected attribute not in the tree yet, create a new node
+        if self.selected_attribute not in self.criterias_tree[item_name]["Attributes Needed"]:
+            self.criterias_tree[item_name]["Attributes Needed"][self.selected_attribute] = QtWidgets.QTreeWidgetItem(parent)
+        node = self.criterias_tree[item_name]["Attributes Needed"][self.selected_attribute]
+        self.update_criterias_tree_text(node, self.selected_attribute, value, True)
 
     # - start and abort btn -
     # btn_start_scan
