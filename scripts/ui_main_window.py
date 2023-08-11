@@ -3,21 +3,11 @@ import pyautogui
 import keyboard
 import threading
 import json
+import os
 
 from item_attr_list import ITEM_ATTR_LIST
+from base_criterias import BASE_CRITERIAS, BASE_INVENTORY_SLOTS_TO_CHECK
 from items_scaner import start_scan
-
-inventory_slot_to_check = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0]
-]
-# for testing
-# inventory_slot_to_check = [
-#     [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-#     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-# ]
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -53,6 +43,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        # load last used data
+        self.load_data(True)
     
     # function to init class variables
     def init_var(self):
@@ -60,74 +53,7 @@ class Ui_MainWindow(object):
         self.scanning_inventory = False
 
         # criterias for item scan
-        self.criterias = {
-            "Helm": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Chest": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Gloves": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Pants": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Boots": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Amulet": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Ring": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "One-Handed Weapon": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Two-Handed Weapon": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Off Hand": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-            "Shield": {
-                "Matches Needed": 3,
-                "Attributes Needed": {
-
-                },
-            },
-        }
+        self.criterias = BASE_CRITERIAS
 
         # for group_box_items
         self.items_names = [
@@ -169,7 +95,7 @@ class Ui_MainWindow(object):
         self.selected_attribute_value = 0
 
         # for group_box_inventory
-        self.inventory_slot_to_check = inventory_slot_to_check[:]
+        self.inventory_slot_to_check = BASE_INVENTORY_SLOTS_TO_CHECK
 
     # ----- all functions for widgets -----
     # - menu -
@@ -202,59 +128,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menu_file.menuAction())
 
     def reset_ui_data(self):
-        new_inventory_slot_to_check = [
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        ]
-
-        new_criterias = {
-            "Helm": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Chest": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Gloves": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Pants": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Boots": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Amulet": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Ring": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "One-Handed Weapon": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Two-Handed Weapon": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Off Hand": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-            "Shield": {
-                "Matches Needed": 3,
-                "Attributes Needed": {},
-            },
-        }
-
+        new_inventory_slot_to_check = BASE_INVENTORY_SLOTS_TO_CHECK
+        new_criterias = BASE_CRITERIAS
         new_criterias_tree = {}
 
         self.inventory_slot_to_check = new_inventory_slot_to_check
@@ -276,33 +151,40 @@ class Ui_MainWindow(object):
             with open(filename, "w") as f:
                 json.dump(data, f, indent=4)
 
-    def load_data(self):
+    def load_data(self, first_open=False):
+        # load last used file if the add is first open
         default_path = "saved_criterias/"
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Load File", default_path, "JSON Files (*.json)")
+        filename = default_path + "last_used_criterias.json"
+        
+        if not first_open:
+            filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Load File", default_path, "JSON Files (*.json)")
+
         if filename:
-            with open(filename, "r") as f:
-                data = json.load(f)
+            # Check if the file exists
+            if os.path.exists(filename):
+                with open(filename, "r") as f:
+                    data = json.load(f)
 
-                try:
-                    # create temp variable to hold an copy data in case of invalid data input
-                    temp_inventory = data.get("inventory_slot_to_check")
-                    temp_criterias = data.get("criterias")
-                    temp_criterias_tree = {}
+                    try:
+                        # create temp variable to hold an copy data in case of invalid data input
+                        temp_inventory = data.get("inventory_slot_to_check")
+                        temp_criterias = data.get("criterias")
+                        temp_criterias_tree = {}
 
-                    # these two operation might return errow with invalid data
-                    self.load_data_to_group_box_inventory(temp_inventory)
-                    self.load_data_to_group_box_criterias(temp_criterias_tree, temp_criterias)
+                        # these two operation might return errow with invalid data
+                        self.load_data_to_group_box_inventory(temp_inventory)
+                        self.load_data_to_group_box_criterias(temp_criterias_tree, temp_criterias)
 
-                    self.inventory_slot_to_check = temp_inventory
-                    self.criterias_tree = temp_criterias_tree
-                    self.criterias = temp_criterias
-                    print("Data loaded from file:")
-                except Exception as e:
-                    self.load_data_to_group_box_inventory(self.inventory_slot_to_check)
-                    self.load_data_to_group_box_criterias(self.criterias_tree, self.criterias)
-                    print(e)
-                    error_message = "An error occurred while loading the file!"
-                    QtWidgets.QMessageBox.critical(self.centralwidget, "Error", error_message)
+                        self.inventory_slot_to_check = temp_inventory
+                        self.criterias_tree = temp_criterias_tree
+                        self.criterias = temp_criterias
+                        print("Data loaded from file:")
+                    except Exception as e:
+                        self.load_data_to_group_box_inventory(self.inventory_slot_to_check)
+                        self.load_data_to_group_box_criterias(self.criterias_tree, self.criterias)
+                        print(e)
+                        error_message = "An error occurred while loading the file!"
+                        QtWidgets.QMessageBox.critical(self.centralwidget, "Error", error_message)
     
     def exit_application(self):
         keyboard.unhook_all()

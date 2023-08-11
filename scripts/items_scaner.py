@@ -6,7 +6,7 @@ import random
 import time
 import re
 
-from criterias import CRITERIAS, ALL_GEAR_TYPES, WEAPONS_LIST
+from base_criterias import CRITERIAS, ALL_GEAR_TYPES, WEAPONS_LIST
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 

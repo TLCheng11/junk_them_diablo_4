@@ -1,3 +1,56 @@
+BASE_INVENTORY_SLOTS_TO_CHECK = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+]
+
+BASE_CRITERIAS = {
+    "Helm": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Chest": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Gloves": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Pants": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Boots": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Amulet": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Ring": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "One-Handed Weapon": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Two-Handed Weapon": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Off Hand": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+    "Shield": {
+        "Matches Needed": 3,
+        "Attributes Needed": {},
+    },
+}
+
 CRITERIAS = {
     "Item_teir_to_keep": [
         # "Normal",
