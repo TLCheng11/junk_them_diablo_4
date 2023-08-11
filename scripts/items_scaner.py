@@ -151,8 +151,9 @@ def check_criteria(criteria, item_data, player_class="Rogue"):
     # start comparing
     for attr in class_criteria[gear_type]["attributes_needed"]:
 
-        # TODO:
-        # [X]% in gloves and ring and weapon need to reformat pattern
+        # convert [X]% in gloves and ring and weapon into regex
+        attr.replace("[X]%", "[\[\d.\]%]+")
+        print(attr)
 
         pattern = re.compile(rf'([\d.]+)[%\s]*{attr}(?! [a-zA-Z])')
         match = re.search(pattern, trimmed_item_data)
