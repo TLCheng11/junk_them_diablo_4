@@ -188,6 +188,7 @@ class Ui_MainWindow(object):
         self.menu_action_save.triggered.connect(self.save_data)
         self.menu_action_load = QtWidgets.QAction(MainWindow)
         self.menu_action_load.setObjectName("menu_action_load")
+        self.menu_action_load.triggered.connect(self.load_data)
         self.menu_action_exit = QtWidgets.QAction(MainWindow)
         self.menu_action_exit.setObjectName("menu_action_exit")
 
@@ -209,6 +210,25 @@ class Ui_MainWindow(object):
         if filename:
             with open(filename, "w") as f:
                 json.dump(data, f, indent=4)
+
+    def load_data(self):
+        default_path = "saved_criterias/"
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self.centralwidget, "Load File", default_path, "JSON Files (*.json)")
+        if filename:
+            with open(filename, "r") as f:
+                data = json.load(f)
+                temp_inventory = data.get("inventory_slot_to_check")
+                temp_criterias = data.get("criterias")
+
+
+                self.reset_group_box_inventory(temp_inventory)
+
+                try:
+                    pass
+                    self.inventory_slot_to_check = data.get("inventory_slot_to_check")
+                    print("Data loaded from file:")
+                except:
+                    self.reset_group_box_inventory(self.inventory_slot_to_check)
 
     # - group_box_items -
     def add_group_box_items(self):
@@ -460,6 +480,15 @@ class Ui_MainWindow(object):
             else:
                 self.inventory_slot_to_check[row][col] = 1
                 curr_btn.setStyleSheet("background-color: green")
+
+    def reset_group_box_inventory(self, temp_inventory):
+        for row in range(len(temp_inventory)):
+            for col in range(len(temp_inventory[row])):
+                curr_btn = self.inventory_btns[row][col]
+                if temp_inventory[row][col]:
+                    curr_btn.setStyleSheet("background-color: green")
+                else:
+                    curr_btn.setStyleSheet("background-color: red")
 
     # - group_box_criterias -
     def add_group_box_criterias(self):
