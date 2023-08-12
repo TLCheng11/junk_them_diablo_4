@@ -329,12 +329,14 @@ class Ui_MainWindow(object):
         self.double_spin_box_matches_needed.setGeometry(QtCore.QRect(260, 20, 30, 20))
         self.double_spin_box_matches_needed.setDecimals(0)
         self.double_spin_box_matches_needed.setSingleStep(1)
+        self.double_spin_box_matches_needed.setMinimum(1)
         self.double_spin_box_matches_needed.setMaximum(4)
         self.double_spin_box_matches_needed.setObjectName("double_spin_box_matches_needed")
 
         self.btn_confirm_matches_needed = QtWidgets.QPushButton(self.group_box_attributes)
         self.btn_confirm_matches_needed.setGeometry(QtCore.QRect(305, 20, 75, 20))
         self.btn_confirm_matches_needed.setObjectName("btn_confirm_matches_needed")
+        self.btn_confirm_matches_needed.clicked.connect(self.on_click_btn_confirm_matches_needed)
 
         # row 2
         self.label_curr_class = QtWidgets.QLabel(self.group_box_attributes)
@@ -410,6 +412,14 @@ class Ui_MainWindow(object):
             value = round(self.double_spin_box_attributes.value(), 1)
             self.criterias[item_name]["Attributes Needed"][self.selected_attribute] = value
             self.add_node_to_criterias_tree(item_name, value)
+
+    def on_click_btn_confirm_matches_needed(self):
+        if self.curr_item[0]:
+            item_name = self.curr_item_full_text[self.curr_item[0]]
+            value = int(self.double_spin_box_matches_needed.value())
+            self.criterias[item_name]["Matches Needed"] = value
+            node = self.criterias_tree[item_name]["Matches Needed"]["node"]
+            self.update_criterias_tree_text(node, "Matches Needed", value)
 
     # - group_box_inventory -
     def add_group_box_inventory(self):
