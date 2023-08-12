@@ -174,10 +174,11 @@ def check_gear_type(item_data):
                     (weapon_inherited_attr, weapon_type) = WEAPONS_LIST[gear_type]
                     pattern = rf'([\d.]+)[%\s]*({weapon_inherited_attr})'
                     match = re.search(pattern, item_data)
-                    last_index = match.end(2)
                     # print(weapon_inherited_attr)
                     # print(match.group(1))
-                    # print(item_data[last_index:])
+                    # print(match.group(2))
+                    last_index = match.end(2)
+                    print(item_data[last_index:])
                     return (weapon_type, last_index)
                 else:
                     # if it is not a weapon, find the data index after the gear word
