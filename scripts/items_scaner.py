@@ -117,9 +117,9 @@ def check_criterias(criterias, item_data, player_class="Rogue"):
     if check_marked_as_junk(item_data):
         return True
 
-    # # if it is legendary or unique, skip
-    # if "Legendary" in item_data or "Unique" in item_data:
-    #     return True
+    # if it is legendary or unique, skip
+    if "Legendary" in item_data or "Unique" in item_data:
+        return True
 
     # if item is upgraded, skip
     if "Upgrades" in item_data:

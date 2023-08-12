@@ -311,30 +311,49 @@ class Ui_MainWindow(object):
 
     # - group_box_attributes -
     def add_group_box_attributes(self):
+        # container
         self.group_box_attributes = QtWidgets.QGroupBox(self.centralwidget)
-        self.group_box_attributes.setGeometry(QtCore.QRect(10, 270, 390, 80))
+        self.group_box_attributes.setGeometry(QtCore.QRect(10, 250, 390, 110))
         self.group_box_attributes.setObjectName("group_box_attributes")
 
+        # row 1
         self.label_curr_item = QtWidgets.QLabel(self.group_box_attributes)
         self.label_curr_item.setGeometry(QtCore.QRect(10, 22, 150, 16))
         self.label_curr_item.setObjectName("label_curr_item")
 
+        self.label_matches_needed = QtWidgets.QLabel(self.group_box_attributes)
+        self.label_matches_needed.setGeometry(QtCore.QRect(170, 22, 85, 16))
+        self.label_matches_needed.setObjectName("label_matches_needed")
+
+        self.double_spin_box_matches_needed = QtWidgets.QDoubleSpinBox(self.group_box_attributes)
+        self.double_spin_box_matches_needed.setGeometry(QtCore.QRect(260, 20, 30, 20))
+        self.double_spin_box_matches_needed.setDecimals(0)
+        self.double_spin_box_matches_needed.setSingleStep(1)
+        self.double_spin_box_matches_needed.setMaximum(4)
+        self.double_spin_box_matches_needed.setObjectName("double_spin_box_matches_needed")
+
+        self.btn_confirm_matches_needed = QtWidgets.QPushButton(self.group_box_attributes)
+        self.btn_confirm_matches_needed.setGeometry(QtCore.QRect(305, 20, 75, 20))
+        self.btn_confirm_matches_needed.setObjectName("btn_confirm_matches_needed")
+
+        # row 2
         self.label_curr_class = QtWidgets.QLabel(self.group_box_attributes)
-        self.label_curr_class.setGeometry(QtCore.QRect(170, 22, 100, 16))
+        self.label_curr_class.setGeometry(QtCore.QRect(10, 47, 150, 16))
         self.label_curr_class.setObjectName("label_curr_class")
 
         self.btn_add_attr = QtWidgets.QPushButton(self.group_box_attributes)
-        self.btn_add_attr.setGeometry(QtCore.QRect(305, 20, 75, 20))
+        self.btn_add_attr.setGeometry(QtCore.QRect(305, 47, 75, 20))
         self.btn_add_attr.setObjectName("btn_add_attr")
         self.btn_add_attr.clicked.connect(self.on_click_btn_add_attr)
-
+        
+        # row 3
         self.combo_box_attributes = QtWidgets.QComboBox(self.group_box_attributes)
-        self.combo_box_attributes.setGeometry(QtCore.QRect(10, 45, 310, 21))
+        self.combo_box_attributes.setGeometry(QtCore.QRect(10, 75, 310, 20))
         self.combo_box_attributes.setObjectName("combo_box_attributes")
         self.combo_box_attributes.activated.connect(self.on_combo_box_attributes_selected)
 
         self.double_spin_box_attributes = QtWidgets.QDoubleSpinBox(self.group_box_attributes)
-        self.double_spin_box_attributes.setGeometry(QtCore.QRect(330, 45, 50, 21))
+        self.double_spin_box_attributes.setGeometry(QtCore.QRect(330, 75, 50, 20))
         self.double_spin_box_attributes.setDecimals(1)
         self.double_spin_box_attributes.setSingleStep(0.1)
         self.double_spin_box_attributes.setMaximum(0)
@@ -627,8 +646,10 @@ class Ui_MainWindow(object):
         # attributes
         self.group_box_attributes.setTitle(_translate("MainWindow", "Attributes"))
         self.label_curr_item.setText(_translate("MainWindow", self.curr_item_full_text[self.curr_item[0]]))
+        self.label_matches_needed.setText(_translate("MainWindow", "Matched Needed:"))
         self.label_curr_class.setText(_translate("MainWindow", self.curr_class_full_text[self.curr_class[0]]))
-        self.btn_add_attr.setText(_translate("MainWindow", "Add Attr"))
+        self.btn_confirm_matches_needed.setText(_translate("MainWindow", "Comfirm ->"))
+        self.btn_add_attr.setText(_translate("MainWindow", "Add Attr ->"))
 
         # inventory
         self.group_box_inventory.setTitle(_translate("MainWindow", "Inventory Slots"))
