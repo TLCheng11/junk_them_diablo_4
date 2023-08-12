@@ -79,7 +79,6 @@ def start_scan(window_size, inventory_slot_to_check, criterias, ui, x=1295, y=76
     print("Done Scanning")
     ui.scanning_inventory = False
 
-
 def scan_item_attr(window_size, col, x):
     # init window size and tooltip size and direction
     left_tooltip_start = 425 * 1920 // window_size.width * -1
@@ -118,9 +117,9 @@ def check_criterias(criterias, item_data, player_class="Rogue"):
     if check_marked_as_junk(item_data):
         return True
 
-    # if it is legendary or unique, skip
-    if "Legendary" in item_data or "Unique" in item_data:
-        return True
+    # # if it is legendary or unique, skip
+    # if "Legendary" in item_data or "Unique" in item_data:
+    #     return True
 
     # if item is upgraded, skip
     if "Upgrades" in item_data:
@@ -141,10 +140,15 @@ def check_criterias(criterias, item_data, player_class="Rogue"):
     for attr in criterias[gear_type]["Attributes Needed"]:
 
         # convert [X]% in gloves and ring and weapon into regex
-        attr.replace("[X]%", "[\[\d.\]%]+")
-        print(attr)
+        if "[X]%" in attr:
+            idx = attr.index("[X]%")
+            prefix = attr[:idx]
+            suffix = attr[idx + 4:]
+            print(prefix + suffix)
+            pattern = re.compile(rf'{prefix}[+]*([\d.]+)[%]*{suffix}(?! [a-zA-Z])')
+        else:
+            pattern = re.compile(rf'([\d.]+)[%\s]*{attr}(?! [a-zA-Z])')
 
-        pattern = re.compile(rf'([\d.]+)[%\s]*{attr}(?! [a-zA-Z])')
         match = re.search(pattern, trimmed_item_data)
         if match and float(match.group(1)) >= criterias[gear_type]["Attributes Needed"][attr]:
             matches_needed -= 1
