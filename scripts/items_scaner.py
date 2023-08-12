@@ -136,6 +136,13 @@ def check_criterias(criterias, item_data, player_class="Rogue"):
     trimmed_item_data = item_data[cutoff_index:]
     matches_needed = criterias[gear_type]["Matches Needed"]
 
+    if matches_needed > 4:
+        return False
+
+    # if nothing need to be matched, keep item
+    if not matches_needed or not len(criterias[gear_type]["Attributes Needed"]):
+        return True
+
     # start comparing
     for attr in criterias[gear_type]["Attributes Needed"]:
 

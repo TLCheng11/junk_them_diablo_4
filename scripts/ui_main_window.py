@@ -329,13 +329,14 @@ class Ui_MainWindow(object):
         self.double_spin_box_matches_needed.setGeometry(QtCore.QRect(260, 20, 30, 20))
         self.double_spin_box_matches_needed.setDecimals(0)
         self.double_spin_box_matches_needed.setSingleStep(1)
-        self.double_spin_box_matches_needed.setMinimum(1)
-        self.double_spin_box_matches_needed.setMaximum(4)
+        self.double_spin_box_matches_needed.setMinimum(0)
+        self.double_spin_box_matches_needed.setMaximum(5)
         self.double_spin_box_matches_needed.setObjectName("double_spin_box_matches_needed")
 
         self.btn_confirm_matches_needed = QtWidgets.QPushButton(self.group_box_attributes)
         self.btn_confirm_matches_needed.setGeometry(QtCore.QRect(305, 20, 75, 20))
         self.btn_confirm_matches_needed.setObjectName("btn_confirm_matches_needed")
+        self.btn_confirm_matches_needed.setToolTip("set this to 0 if you want to keep all this item type, 5 to junk all this item type.")
         self.btn_confirm_matches_needed.clicked.connect(self.on_click_btn_confirm_matches_needed)
 
         # row 2
@@ -535,10 +536,9 @@ class Ui_MainWindow(object):
     def update_criterias_tree_text(self, node, text, value=None, delete_btn=False):
         _translate = QtCore.QCoreApplication.translate
         node.setText(0, _translate("MainWindow", text))
-        if value:
+        if value != None:
             node.setText(1, _translate("MainWindow", str(value)))
         if delete_btn:
-            # node.setText(2, _translate("MainWindow", "x"))
             button = QtWidgets.QPushButton("X")
             button.setFixedSize(20, 20)
             button.setStyleSheet("QPushButton { text-align: center; }")
