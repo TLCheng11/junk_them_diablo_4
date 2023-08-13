@@ -93,7 +93,7 @@ WEAPONS_LIST = {
     "Two-Handed Scythe": ["Life On Kill", "Two-Handed Weapon"],
     "Bow": ["Damage to Distant Enemies", "Two-Handed Weapon"],
     "Crossbow": ["Vulnerable Damage", "Two-Handed Weapon"],
-    "Totem": ["Cooldown Reduction", "Off Handed"],
-    "Focus": ["Cooldown Reduction", "Off Handed"],
+    "Totem": ["Cooldown Reduction", "Off Hand"],
+    "Focus": ["Cooldown Reduction", "Off Hand"],
     "Shield": ["Block Chance", "Shield"],
 }
