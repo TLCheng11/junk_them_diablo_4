@@ -66,7 +66,8 @@ def start_scan(window_size, inventory_slot_to_check, criterias, ui, x=1295, y=76
 
             # move mouse horizontally until it reach last slot on the row
             if col < 10:
-                pyautogui.moveRel(inventory_slot_width, 0, 0.1 + time_lag)
+                pyautogui.moveTo(inventory_slot_width, 0, 0.1 + time_lag)
+                # pyautogui.moveRel(inventory_slot_width, 0, 0.1 + time_lag)
                 time.sleep(0.01)
                 x += inventory_slot_width
 
