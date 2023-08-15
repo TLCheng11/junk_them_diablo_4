@@ -12,8 +12,8 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 
 def start_scan(window_size, inventory_slot_to_check, criterias, ui, x=1295, y=760):
     # convert start position and inventory dimension with game window resolution
-    x = 1920 * x / window_size.width
-    y = 1080 * y / window_size.height
+    x = 1920 * x // window_size.width
+    y = 1080 * y // window_size.height
     inventory_slot_width = 55 * 1920 // window_size.width
     inventory_slot_height = 80 * 1080 // window_size.height
 
@@ -33,6 +33,11 @@ def start_scan(window_size, inventory_slot_to_check, criterias, ui, x=1295, y=76
                 return
 
             if not ui.scanning_inventory:
+                print("Abort Scanning!")
+                return
+
+            if not check_inventory_open(window_size):
+                print("Cannot find inventory!")
                 print("Abort Scanning!")
                 return
 
@@ -66,10 +71,10 @@ def start_scan(window_size, inventory_slot_to_check, criterias, ui, x=1295, y=76
 
             # move mouse horizontally until it reach last slot on the row
             if col < 10:
-                pyautogui.moveTo(inventory_slot_width, 0, 0.1 + time_lag)
                 # pyautogui.moveRel(inventory_slot_width, 0, 0.1 + time_lag)
-                time.sleep(0.01)
                 x += inventory_slot_width
+                pyautogui.moveTo(x, y, 0.1 + time_lag)
+                time.sleep(0.01)
 
         # move mouse to first item on next row
         x -= inventory_slot_width * 10
@@ -95,6 +100,19 @@ def scan_item_attr(window_size, col, x):
     right = left + tooltop_width
 
     # scan tooltips
+    return ocr_image(left, top, right, bottom)
+
+def check_inventory_open(window_size):
+    left = 1920 * 1285 // window_size.width
+    right = 1920 * (1285 + 160) // window_size.width
+    top = 1080 * 12 // window_size.height
+    bottom = 1080 * (12 + 31) // window_size.height
+
+    text = ocr_image(left, top, right, bottom)
+
+    return "CHARACTER" in text
+
+def ocr_image(left, top, right, bottom):
     window_content = ImageGrab.grab(bbox=(left, top, right, bottom))
 
     extracted_text = pytesseract.image_to_string(window_content)
