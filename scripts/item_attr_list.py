@@ -81,6 +81,8 @@ ITEM_ATTR_LIST = {
             "Brawling Skill Damage": {"increment": 0.1, "max_value": 0 },
             "Damage Reduction from Enemies That Are Bleeding": {"increment": 0.1, "max_value": 0 },
             "Damage Reduction while Fortified": {"increment": 0.1, "max_value": 0 },
+            "Damage with Two-Handed Bludgeoning Weapons": {"increment": 0.1, "max_value": 0 },
+            "Damage with Two-Handed Slashing Weapons": {"increment": 0.1, "max_value": 0 },
             "Fortify Generation": {"increment": 0.1, "max_value": 0 },
             "Physical Damage": {"increment": 0.1, "max_value": 0 },
             "Ranks of Challenging Shout": {"increment": 1, "max_value": 3 },
