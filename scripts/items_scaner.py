@@ -103,8 +103,8 @@ def scan_item_attr(window_size, col, x):
     return ocr_image(left, top, right, bottom)
 
 def check_inventory_open(window_size):
-    left = 1920 * 1285 // window_size.width
-    right = 1920 * (1285 + 160) // window_size.width
+    left = 1920 * 1300 // window_size.width
+    right = 1920 * (1300 + 210) // window_size.width
     top = 1080 * 12 // window_size.height
     bottom = 1080 * (12 + 31) // window_size.height
 
